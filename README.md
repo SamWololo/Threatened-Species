@@ -37,3 +37,10 @@ read the methods and supplementary information of the papers Susy Sends you
 for monday define group, region, and which species you want to work with 
 Find out if there are range maps with IUCN
 check range maps of IUCN
+
+4/9/18 Weeky Update
+Found rredlist and installed
+Loaded package
+thinking about decreasing the izards order Squamata
+*** struggling to narrow down the groups. 
+

@@ -1,5 +1,22 @@
+# Updating R
+# installing/loading the package:
+if(!require(installr)) {
+  install.packages("installr"); 
+  require(installr)
+} #load / install+load installr
+
+# using the package:
+updateR()
+
+# Installing packages 
+install.packages("rredlist")
+install.packages("tidyverse")
+install.packages("ecosdata")
+
 # Libraries ----------------------------------------------------------------------------------------------
+library(rredlist)
 library(tidyverse)
+
 
 # Data ---------------------------------------------------------------------------------------------------
 ## Download amniote data
@@ -14,6 +31,9 @@ download.file("http://www.iucnredlist.org/data_request_forms/158018/download",
 # Read data
 Amniote<-read.csv("./data/Amniote_Database_Aug_2015.csv")
 IUCNreptile<-read.csv("./data/ICUN_Redlist_Reptile.csv")
+
+# Viewing data
+View(Amniote)
 
 
 # Data carpentry --------------------------------------------------------------------------------------- 
