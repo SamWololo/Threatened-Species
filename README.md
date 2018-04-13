@@ -44,3 +44,11 @@ Loaded package
 thinking about decreasing the izards order Squamata
 *** struggling to narrow down the groups. 
 
+4/13/18
+its been shown in mammals that big things make big ranges. pop size small, gotta spread out, need habitat. 
+When you are small you have smaller ranges. 
+Riverine fish. if you look at which wer endangered. For their size they had a relatively restricted habitat. 
+So for my project I can think about that for reptiles. Are there things for body size that matter as well. Amniote life history gives me lots of information. In amniote I can look at that dataframe and find the paper associated with it. There's clutch size, etc. 
+So with IUCN data I have range data. I can fist calculate the range size and interface that with the climate data. What are the average species that animal lives under. 
+
+Susy just uploaded a new guide on how do use loops and shapefiles. How to use tracking information. 
