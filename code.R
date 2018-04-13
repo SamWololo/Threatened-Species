@@ -1,41 +1,35 @@
-# Updating R
-# installing/loading the package:
-if(!require(installr)) {
-  install.packages("installr"); 
-  require(installr)
-} #load / install+load installr
-
-# using the package:
-updateR()
-
 # Installing packages 
 install.packages("rredlist")
 install.packages("tidyverse")
-install.packages("ecosdata")
+install.packages("foreach")
+install.packages("dismo")
+install.packages("speciesgeocodeR")
 
-# Libraries ----------------------------------------------------------------------------------------------
+# Libraries --------------------------------------------------------------------------------------------
 library(rredlist)
 library(tidyverse)
+library(foreach)
+library(dismo)
+library(speciesgeocodeR)
 
-
-# Data ---------------------------------------------------------------------------------------------------
+# Data -------------------------------------------------------------------------------------------------
 ## Download amniote data
 download.file("http://www.esapubs.org/archive/ecol/E096/269/Data_Files/Amniote_Database_Aug_2015.csv", 
               "./Data/Amniote_Database_Aug_2015.csv")
-## Download The IUCN Red List of Threatened Species
-download.file("http://www.iucnredlist.org/data_request_forms/158018/download", 
-              "./Data/ICUN_Redlist_Reptile.csv")
-
-## Download 
+## Download The IUCN Red List of Threatened Species for REPTILES
+# The data file did not have a server URL file nor was in .csv format for use of the download.file command. 
+# To download the spatial data for reptiles, I visited http://www.iucnredlist.org/technical-documents/spatial-data.
+# The main dataset for reptiles was downloaded into the downloads folder of the PC and moved to the data
+# folder of this Rproject, where it was unzipped. 
 
 # Read data
-Amniote<-read.csv("./data/Amniote_Database_Aug_2015.csv")
-IUCNreptile<-read.csv("./data/ICUN_Redlist_Reptile.csv")
+Amniote<-read.csv("./Data/Amniote_Database_Aug_2015.csv")
+Amniote[Amniote==-999]<-NA
 
 # Viewing data
 View(Amniote)
 
-
 # Data carpentry --------------------------------------------------------------------------------------- 
-Amniote[Amniote==-999]<-NA
-ICUNreptile[IUCNreptile==-999]<-NA
+Testudines<-
+  Amniote %>% 
+  filter(class == "Reptilia" & order =="Testudines")
