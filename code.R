@@ -44,3 +44,5 @@ species_iucn<-iucn_status(ia)
 
 ## Include the info into the data frame
 Testudines$iucn<-species_iucn
+
+Testudines[,c("Binomial","iucn")]
