@@ -52,3 +52,6 @@ So for my project I can think about that for reptiles. Are there things for body
 So with IUCN data I have range data. I can fist calculate the range size and interface that with the climate data. What are the average species that animal lives under. 
 
 Susy just uploaded a new guide on how do use loops and shapefiles. How to use tracking information. 
+
+4/15/18 Weekly Update
+I tested the Rscript given in the website given in class. I installed the new packages and was able to load the libraries. Amniote data works and I was able to filter for a reptile order which I think would be interesting to investigate during this project: turtles of the order Testudines. Unfortunately, I have yet to recieve an API key from the IUCN. 
