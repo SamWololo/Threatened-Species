@@ -55,3 +55,6 @@ Susy just uploaded a new guide on how do use loops and shapefiles. How to use tr
 
 4/15/18 Weekly Update
 I tested the Rscript given in the website given in class. I installed the new packages and was able to load the libraries. Amniote data works and I was able to filter for a reptile order which I think would be interesting to investigate during this project: turtles of the order Testudines. Unfortunately, I have yet to recieve an API key from the IUCN. Unfortunately the taxize package does not work without the key, without which I cannot move forward. I'm stuck on where to go from here... I'm not sure if I can make any graphs or analyze any data with these errors... 
+
+4/16/2018 update
+Used Susy's key. Downloaded the taxize package and loaded the library. Data is being retrieved from all the turtles. 

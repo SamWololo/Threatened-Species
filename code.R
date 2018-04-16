@@ -4,6 +4,7 @@ install.packages("tidyverse")
 install.packages("foreach")
 install.packages("dismo")
 install.packages("speciesgeocodeR")
+install.packages("taxize")
 
 # Libraries --------------------------------------------------------------------------------------------
 library(rredlist)
@@ -11,6 +12,7 @@ library(tidyverse)
 library(foreach)
 library(dismo)
 library(speciesgeocodeR)
+library(taxize)
 
 # Data -------------------------------------------------------------------------------------------------
 ## To download amniote data
@@ -35,7 +37,8 @@ Testudines<-
   filter(class == "Reptilia" & order =="Testudines")
 
 # Extracting IUCN Status for each species
-Sys.setenv(IUCN_REDLIST_KEY=iucn_key)
+## With Susy's key
+Sys.setenv(IUCN_REDLIST_KEY="0b62357effbfe43b2324a5a1ac9df09d7b641e6a27ccaeb4fefb87747a0eea81")
 
 Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
 
