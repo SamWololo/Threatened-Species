@@ -72,3 +72,4 @@ https://en.wikipedia.org/wiki/IUCN_Red_List#IUCN_Red_List_Categories
 Near threatened (LR/nt) and least concern (LR/lc) have become their own categries in the 2001 system. 
 Conservation dependent (LR/cd) has merged into near threatened. 
 
+Once I download the gbif data I need to write a csv file from the data. 

@@ -5,6 +5,7 @@ library(foreach)
 library(dismo)
 library(speciesgeocodeR)
 library(taxize)
+library(foreach)
 
 # Data -------------------------------------------------------------------------------------------------
 ## To download amniote data
@@ -27,6 +28,8 @@ View(Amniote)
 Testudines<-
   Amniote %>% 
   filter(class == "Reptilia" & order =="Testudines")
+
+n_distinct(Testudines$family)
 
 # Extracting IUCN Status for each species
 ## With my IUCN API key
@@ -66,10 +69,15 @@ species_iucn[which(species_iucn=="LR/lc")]<-"LC"
 # Let's see what our table looks like now: 
 table(species_iucn)
 
-# GBIF Data -----------------------------------------------------------------------------------------
+# GBIF Data using Loops --------------------------------------------------------------------------------
 # Getting values of occurrences of the order Testudines
-turtleOcc<-gbif("Testudines")
+Testudines$genus<-as.character(Testudines$genus)
+Testudines$species<-as.character(Testudines$species)
 
-turtleOcc<-
-  turtleOcc %>% 
-  filter(!is.na(lon)&!is.na(lat))
+gbif_records <-
+  foreach(i=1:length(Testudines$Binomial),.combine = rbind)%do%{
+    
+    gbif(Testudines$genus[i],Testudines$species[i])[c("species","lat","lon","fullCountry")]
+    
+  }
+
