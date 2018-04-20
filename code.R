@@ -1,11 +1,3 @@
-# Installing packages 
-install.packages("rredlist")
-install.packages("tidyverse")
-install.packages("foreach")
-install.packages("dismo")
-install.packages("speciesgeocodeR")
-install.packages("taxize")
-
 # Libraries --------------------------------------------------------------------------------------------
 library(rredlist)
 library(tidyverse)
@@ -37,8 +29,8 @@ Testudines<-
   filter(class == "Reptilia" & order =="Testudines")
 
 # Extracting IUCN Status for each species
-## With Susy's key
-Sys.setenv(IUCN_REDLIST_KEY="0b62357effbfe43b2324a5a1ac9df09d7b641e6a27ccaeb4fefb87747a0eea81")
+## With my IUCN API key
+Sys.setenv(IUCN_REDLIST_KEY="79326e37e61929e5349ff01eaef7da1a0a8a9003583714d5282227332875d576")
 
 Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
 
@@ -73,3 +65,11 @@ species_iucn[which(species_iucn=="LR/lc")]<-"LC"
 
 # Let's see what our table looks like now: 
 table(species_iucn)
+
+# GBIF Data -----------------------------------------------------------------------------------------
+# Getting values of occurrences of the order Testudines
+turtleOcc<-gbif("Testudines")
+
+turtleOcc<-
+  turtleOcc %>% 
+  filter(!is.na(lon)&!is.na(lat))

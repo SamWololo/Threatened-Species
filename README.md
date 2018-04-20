@@ -41,7 +41,7 @@ check range maps of IUCN
 4/9/18 Weeky Update
 Found rredlist and installed
 Loaded package
-thinking about decreasing the izards order Squamata
+thinking about decreasing the lizards order Squamata
 *** struggling to narrow down the groups. 
 
 4/13/18
@@ -60,6 +60,15 @@ I tested the Rscript given in the website given in class. I installed the new pa
 Used Susy's key. Downloaded the taxize package and loaded the library. Data is being retrieved from all the turtles. 
 
 Susy meeting: 
-Now that I have unpacked the Testunides order into 273 species, I have something I can work with. Susy ran some visualization codes to see what my distribution over different red list categories. We found that we have good heterogenetiy in this regard. One hiccup: some taxa are in outdated categories (from 1994) which means that I have to rename them. I need to then grab the map data from GBIF or a similar database. IN THE CODE FILTER OUT SPECIES WITHOUT REDLIST DATA. Otherwise you will have a massive amount of data, much of which you will not need. Once you get GBIF data, remember to get rid of NA's, 0's and duplicates. Once you do this, you can then merge the dataframes into one, which will give us a big ol' dataframe that we can use for our maps. 
+Now that I have unpacked the Testunides order into 273 species, I have something I can work with. Susy ran some data exploration codes to see what my distribution over different red list categories. We found that we have good heterogenetiy in this regard. One hiccup: some taxa are in outdated categories (from 1994) which means that I have to rename them. I need to then grab the map data from GBIF or a similar database. IN THE CODE FILTER OUT SPECIES WITHOUT REDLIST DATA. Otherwise you will have a massive amount of data, much of which you will not need. Once you get GBIF data, remember to get rid of NA's, 0's and duplicates. Once you do this, you can then merge the dataframes into one, which will give us a big ol' dataframe that we can use for our maps. 
 
 I went through the code Susy and I went over during office hours. I cleaned up the IUCN dataframe of outdated categories as per Wikipedia. I should read some literature this week to verify that my decisions were correct. 
+
+4/20/18 Friday Update:
+How I determined the new (2001) IUCN Red List Categories. 
+http://www.iucnredlist.org/technical-documents/categories-and-criteria/1994-categories-criteria
+http://www.iucnredlist.org/technical-documents/categories-and-criteria/2001-categories-criteria
+https://en.wikipedia.org/wiki/IUCN_Red_List#IUCN_Red_List_Categories
+Near threatened (LR/nt) and least concern (LR/lc) have become their own categries in the 2001 system. 
+Conservation dependent (LR/cd) has merged into near threatened. 
+
