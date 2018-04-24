@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 Data/Spatial
+Data/Testudines.csv
+Data/gbif_records.csv

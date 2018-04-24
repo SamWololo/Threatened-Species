@@ -1,13 +1,12 @@
-# Libraries --------------------------------------------------------------------------------------------
+# Libraries -------------------------------------------------------------------------------------------
 library(rredlist)
 library(tidyverse)
 library(foreach)
 library(dismo)
 library(speciesgeocodeR)
 library(taxize)
-library(foreach)
 
-# Data -------------------------------------------------------------------------------------------------
+# Data ------------------------------------------------------------------------------------------------
 ## To download amniote data
 download.file("http://www.esapubs.org/archive/ecol/E096/269/Data_Files/Amniote_Database_Aug_2015.csv", 
               "./Data/Amniote_Database_Aug_2015.csv")
@@ -24,7 +23,7 @@ Amniote[Amniote==-999]<-NA
 # Viewing data
 View(Amniote)
 
-# Data carpentry --------------------------------------------------------------------------------------- 
+# Data carpentry -------------------------------------------------------------------------------------- 
 Testudines<-
   Amniote %>% 
   filter(class == "Reptilia" & order =="Testudines")
@@ -37,13 +36,15 @@ Sys.setenv(IUCN_REDLIST_KEY="79326e37e61929e5349ff01eaef7da1a0a8a9003583714d5282
 
 Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
 
-ia <- iucn_summary(Testudines$Binomial) ## WARNING: This script loads all the taxa for the Testudines order
+ia <- iucn_summary(Testudines$Binomial) ## WARNING: This script loads all the taxa for Testudines
 species_iucn<-iucn_status(ia) # creates an object out of these unpacked taxa
 
 ## Include the info into the data frame
 Testudines$iucn<-species_iucn
 
 Testudines[,c("Binomial","iucn")]
+
+iucn_df<-data.frame(species=names(species_iucn),status=species_iucn)
 
 # Exploring the data
 head(ia)
@@ -69,15 +70,37 @@ species_iucn[which(species_iucn=="LR/lc")]<-"LC"
 # Let's see what our table looks like now: 
 table(species_iucn)
 
-# GBIF Data using Loops --------------------------------------------------------------------------------
+# GBIF Data using Loops -------------------------------------------------------------------------------
 # Getting values of occurrences of the order Testudines
 Testudines$genus<-as.character(Testudines$genus)
 Testudines$species<-as.character(Testudines$species)
 
-gbif_records <-
-  foreach(i=1:length(Testudines$Binomial),.combine = rbind)%do%{
-    
-    gbif(Testudines$genus[i],Testudines$species[i])[c("species","lat","lon","fullCountry")]
-    
-  }
+Total_records<-NULL
 
+for(i in 4:length(Testudines$Binomial)){
+  
+  tmp<-gbif(Testudines$genus[i],Testudines$species[i])[c("species","lat","lon","fullCountry")]
+  Total_records<-rbind(Total_records,tmp)
+  write.csv(Total_records,"./Data/gbif_records.csv")
+  
+}  # WARNING: This code loads all of the GBIF records for Testudines and takes 2 hours
+
+## Turn the GBIF data into a .csv file for ease of use in the future
+write.csv(gbif_records,"./Data/Testudines.csv")
+
+read.csv(Testudines.csv)
+
+## Cleaning records
+gbif_records<-
+  gbif_records %>% 
+  dplyr::filter(!is.na(lon)&!is.na(lat))
+
+## Get rid of duplicate occurrences
+dups=duplicated(gbif_records[, c("lon", "lat")])
+gbif_records <-gbif_records[!dups, ]
+
+
+## Merging data frames
+iucn_df<-data.frame(species=names(species_iucn),status=species_iucn)
+
+All_Dataframes_df<-merge(Testudines_df, Amniote, by.x="Binomial", by.y="species")
