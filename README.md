@@ -73,3 +73,11 @@ Near threatened (LR/nt) and least concern (LR/lc) have become their own categrie
 Conservation dependent (LR/cd) has merged into near threatened. 
 
 Once I download the gbif data I need to write a csv file from the data. 
+
+4/23/18 Weekly Update: 
+While running the gbif download, the internet connection broke, stopping the download . Unfortunately after troubleshooting it gave me the error: 
+ Error in `[.data.frame`(gbif(Testudines$genus[i], Testudines$species[i]),  : 
+  undefined columns selected 
+When I tried to run the entire gbif from the start, I got the error: 
+  Error in { : task 29 failed - "undefined columns selected" 
+I'm not sure what to do. 

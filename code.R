@@ -85,6 +85,13 @@ for(i in 4:length(Testudines$Binomial)){
   
 }  # WARNING: This code loads all of the GBIF records for Testudines and takes 2 hours
 
+gbif_records <-
+  foreach(i=1:length(Testudines$Binomial),.combine = rbind)%do%{
+    
+    gbif(Testudines$genus[i],Testudines$species[i])[c("species","lat","lon","fullCountry")]
+    
+  }
+
 ## Turn the GBIF data into a .csv file for ease of use in the future
 write.csv(gbif_records,"./Data/Testudines.csv")
 
