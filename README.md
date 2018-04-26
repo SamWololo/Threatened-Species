@@ -81,3 +81,7 @@ While running the gbif download, the internet connection broke, stopping the dow
 When I tried to run the entire gbif from the start, I got the error: 
   Error in { : task 29 failed - "undefined columns selected" 
 I'm not sure what to do. 
+
+4/25/18
+I was getting errors in my data download because of a number of columns error. That is, some of the species I was downloading had more/less vectors, which confused the download, as R wanted to have, say, all species to have 5 vectors, even though some turtles only had 4. There is now a function that does two things: downloads the entire GBIF log of a species (183 vectors) and writes a .csv. I need to check to see if I want to upload this .csv, as for reproducibilitie's sake I don't want someone using my code to have to download everything (takes 3 hours). 
+I am now going to move on, and will try to clean my data and possibly merge dataframes. 

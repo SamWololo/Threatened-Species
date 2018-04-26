@@ -75,32 +75,32 @@ table(species_iucn)
 Testudines$genus<-as.character(Testudines$genus)
 Testudines$species<-as.character(Testudines$species)
 
+library(plyr)
+
 Total_records<-NULL
 
-for(i in 4:length(Testudines$Binomial)){
+for(i in 1:length(Testudines$Binomial)){
   
-  tmp<-gbif(Testudines$genus[i],Testudines$species[i])[c("species","lat","lon","fullCountry")]
-  Total_records<-rbind(Total_records,tmp)
-  write.csv(Total_records,"./Data/gbif_records.csv")
+  print(paste("Downloading GBIF for",i,Testudines$genus[i],Testudines$species[i]))
+  tmp<-gbif(Testudines$genus[i],Testudines$species[i])
   
-}  # WARNING: This code loads all of the GBIF records for Testudines and takes 2 hours
+  Total_records<-rbind.fill(Total_records,tmp)
+  write.csv(Total_records,"./Data/gbif_records2.csv")
+  
+}  # WARNING: This code loads all of the GBIF records for Testudines and takes 3 hours
 
-gbif_records <-
-  foreach(i=1:length(Testudines$Binomial),.combine = rbind)%do%{
-    
-    gbif(Testudines$genus[i],Testudines$species[i])[c("species","lat","lon","fullCountry")]
-    
-  }
 
-## Turn the GBIF data into a .csv file for ease of use in the future
-write.csv(gbif_records,"./Data/Testudines.csv")
-
-read.csv(Testudines.csv)
+gbif_records<-read.csv("Data/gbif_records2.csv")
 
 ## Cleaning records
+# I only want some of the vectors of the gbif dataset, which means that I will have to clean some of them
+# To do this, I need to filter only what I want, but I need to find the exact names of those columns first. 
+names(gbif_records)
+
 gbif_records<-
   gbif_records %>% 
-  dplyr::filter(!is.na(lon)&!is.na(lat))
+  dplyr::filter(!is.na(lon)&!is.na(lat))%>%
+  select(lon,lat,species,fullCountry) #check these names
 
 ## Get rid of duplicate occurrences
 dups=duplicated(gbif_records[, c("lon", "lat")])
