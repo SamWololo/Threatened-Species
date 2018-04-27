@@ -5,6 +5,7 @@ library(foreach)
 library(dismo)
 library(speciesgeocodeR)
 library(taxize)
+library(plyr)
 
 # Data ------------------------------------------------------------------------------------------------
 ## To download amniote data
@@ -24,11 +25,10 @@ Amniote[Amniote==-999]<-NA
 View(Amniote)
 
 # Data carpentry -------------------------------------------------------------------------------------- 
+# Here I filter out the amniote database to only include turtle data. 
 Testudines<-
   Amniote %>% 
   filter(class == "Reptilia" & order =="Testudines")
-
-n_distinct(Testudines$family)
 
 # Extracting IUCN Status for each species
 ## With my IUCN API key
@@ -36,7 +36,7 @@ Sys.setenv(IUCN_REDLIST_KEY="79326e37e61929e5349ff01eaef7da1a0a8a9003583714d5282
 
 Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
 
-ia <- iucn_summary(Testudines$Binomial) ## WARNING: This script loads all the taxa for Testudines
+ia <- iucn_summary(Testudines$Binomial) ## WARNING: This script loads all the taxa for Testudines ~10 mins
 species_iucn<-iucn_status(ia) # creates an object out of these unpacked taxa
 
 ## Include the info into the data frame
@@ -75,8 +75,6 @@ table(species_iucn)
 Testudines$genus<-as.character(Testudines$genus)
 Testudines$species<-as.character(Testudines$species)
 
-library(plyr)
-
 Total_records<-NULL
 
 for(i in 1:length(Testudines$Binomial)){
@@ -100,14 +98,14 @@ names(gbif_records)
 gbif_records<-
   gbif_records %>% 
   dplyr::filter(!is.na(lon)&!is.na(lat))%>%
-  select(lon,lat,species,fullCountry) #check these names
+  dplyr::select(lon, lat, species, country) #check these names: not fullCountry, country. "lat" "lon" OK
 
 ## Get rid of duplicate occurrences
 dups=duplicated(gbif_records[, c("lon", "lat")])
 gbif_records <-gbif_records[!dups, ]
 
-
 ## Merging data frames
 iucn_df<-data.frame(species=names(species_iucn),status=species_iucn)
 
-All_Dataframes_df<-merge(Testudines_df, Amniote, by.x="Binomial", by.y="species")
+All_Dataframes_df<-merge(Testudines, Amniote, by.x="Binomial", by.y="species")
+

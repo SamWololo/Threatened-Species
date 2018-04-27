@@ -26,6 +26,8 @@ species_iucn<-iucn_status(ia) # creates an object out of these unpacked taxa
 ## Include the info into the data frame
 Testudines$iucn<-species_iucn
 
+Testudines[,c("Binomial","iucn")]
+
 iucn_df<-data.frame(species=names(species_iucn),status=species_iucn)
 
 ##Merging dataframe
