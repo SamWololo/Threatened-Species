@@ -85,3 +85,30 @@ I'm not sure what to do.
 4/25/18
 I was getting errors in my data download because of a number of columns error. That is, some of the species I was downloading had more/less vectors, which confused the download, as R wanted to have, say, all species to have 5 vectors, even though some turtles only had 4. There is now a function that does two things: downloads the entire GBIF log of a species (183 vectors) and writes a .csv. I need to check to see if I want to upload this .csv, as for reproducibilitie's sake I don't want someone using my code to have to download everything (takes 3 hours). 
 I am now going to move on, and will try to clean my data and possibly merge dataframes. 
+
+4/28/18 Update
+can open presentation with this graph, say: I expected there to be a latitudinal relationship-not so
+can talk aobut how Russia has no data, make a case for data sharing
+check for plot continuous variables in a map for a chromatic scale which I can tie to occurrence of data
+
+use this graph as a jumping off point. 
+look at the graph gallery for inspiration. r-graph-gallery.com
+
+for the presentation you need a couple of graphics that makes you summarise data (tables too), then one
+about the vulnerability of turtles. This was my question and this was what I found. 
+
+most sampling in europe and US.
+
+so as part of the final project you need to clean it up. In the final project, the final code you just
+include the code that you need to produce the plots you want. 
+
+maybe split up threatened species by norhern hemisphere and south? select all the points of the tropics
+between 15 and -15 in latitude and call those tropics. call the rest temperate. 
+
+can collapse some of the status. don't overwrite in object "status", just make a status2. then see how this data looks
+can create a raster for how many species of turtles i have per pixel - not necessary though
+use other graphs to show relationships between variables and IUCN status
+can have a colored scatterplot
+
+5/1/18 Update
+Tidying up the data. I want to finish up the code soon. I need to finish data exploration to find interesting relationships and then make some maps that show these trends. Perhaps some scatterplots showing relationships as well. 

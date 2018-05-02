@@ -108,19 +108,21 @@ gbif_records <-gbif_records[!dups, ]
 # Now that we have all of our data loaded I need to put all of them in one dataframe for them to be usable. 
 iucn_df<-data.frame(species=names(species_iucn),status=species_iucn)
 
+# To merge the turtle amniote data and iucn data 
 Turtle_Lifehistory_df<-merge(Testudines, iucn_df, by.x="Binomial", by.y="species")
+# To merge the previous merger with gbif records 
 All_Dataframes_df<-merge(Turtle_Lifehistory_df, gbif_records, by.x="Binomial", by.y="species")
 
-View(Turtle_Lifehistory_df)
 View(All_Dataframes_df)
 
 write.csv(All_Dataframes_df, file="./Data/Processed/Clean_Turtle_Lifehistory_Data.csv")
 
 # Data exploration ------------------------------------------------------------------------------------
-## Combining group_by() and summarize() in a pipe to find interesting data about the dataframe. Weight
+## Combining group_by() and summarize() in a pipe to find interesting data about the dataframe. 
+# Mean body mass
 All_Dataframes_df %>% 
   group_by(status) %>% 
-  dplyr::summarise(N_sp=n_distinct(Binomial),  # dplyr because summarise belongs to two packages, gets confused
+  dplyr::summarise(N_sp=n_distinct(Binomial),  # add dplyr because summarise belongs to two packages
                    Weight_avg=mean(adult_body_mass_g, na.rm=TRUE))
 #graph it
 ggplot(data=All_Dataframes_df, aes(x=status,y=log(adult_body_mass_g)))+
@@ -133,7 +135,7 @@ All_Dataframes_df %>%
   ggplot(aes(x=status_iucn,y=log(Weight_avg)))+
   geom_boxplot()
 
-# create 2 datafroames, one aminote and IUCN, then the alldata with gbif only when I want maps
+# create 2 dataframes, one aminote and IUCN, then the alldata with gbif only when I want maps
 # can plot occurrenct 
 
 All_Dataframes_df %>% 
@@ -160,31 +162,6 @@ cols_status<-cols[All_Dataframes_df$status]
 plot(wrld_simpl, xlim=c(min(All_Dataframes_df$lon)-1,max(All_Dataframes_df$lon)+1), ylim=c(min(All_Dataframes_df$lat)-1,max(All_Dataframes_df$lat)+1), axes=TRUE, col="light yellow")
 points(All_Dataframes_df$lon, All_Dataframes_df$lat, col=cols_status, pch=16, cex=0.75)
 legend("top",fill=cols,legend = levels(All_Dataframes_df$status),horiz=TRUE)
-
-# can open presentation with this graph, say: I expected there to be a latitudinal relationship-not so
-# can talk aobut how Russia has no data, make a case for data sharing
-# check for plot continuous variables in a map for a chromatic scale which I can tie to occurrence of data
-
-# use this graph as a jumping off point. 
-# look at the graph gallery for inspiration. r-graph-gallery.com
-
-# for the presentation you need a couple of graphics that makes you summarise data (tables too), then one
-# about the vulnerability of turtles. This was my question and this was what I found. 
-
-#most sampling in europe and US.
-
-# so as part of the final project you need to clean it up. In the final project, the final code you just
-# include the code that you need to produce the plots you want. 
-
-# maybe split up threatened species by norhern hemisphere and south? select all the points of the tropics
-# between 15 and -15 in latitude and call those tropics. call the rest temperate. 
-
-# can collapse some of the status. don't overwrite in object "status", just make a status2. then 
-# see how this data looks
-
-#can create a raster for how many species of turtles i have per pixel - not necessary though
-# use other graphs to show relationships between variables and IUCN status
-# can have a colored scatterplot
 
 # by country
 All_Dataframes_df %>% 
