@@ -1,48 +1,8 @@
-# Libraries -------------------------------------------------------------------------------------------
-if(!require(rredlist)) {
-  install.packages("rredlist");
-  require(rredlist)}
-
-if(!require(tidyverse)) {
-  install.packages("tidyverse");
-  require(tidyverse)}
-
-if(!require(foreach)) {
-  install.packages("foreach");
-  require(foreach)}
-
-if(!require(dismo)) {
-  install.packages("dismo");
-  require(dismo)}
-
-if(!require(speciesgeocodeR)) {
-  install.packages("speciesgeocodeR");
-  require(speciesgeocodeR)}
-
-if(!require(taxize)) {
-  install.packages("taxize");
-  require(taxize)}
-
-if(!require(plyr)) {
-  install.packages("plyr");
-  require(plyr)}
-
-if(!require(cellranger)) {
-  install.packages("cellranger");
-  require(cellranger)}
-
-if(!require(maptools)) {
-  install.packages("maptools");
-  require(maptools)}
-
-if(!require(RColorBrewer)) {
-  install.packages("RcolorBrewer");
-  require(RColorBrewer)}
-
 # Data ------------------------------------------------------------------------------------------------
 ## To download amniote data
 download.file("http://www.esapubs.org/archive/ecol/E096/269/Data_Files/Amniote_Database_Aug_2015.csv", 
               "./Data/Amniote_Database_Aug_2015.csv")
+
 ## To download The IUCN Red List of Threatened Species for REPTILES
 # The data file did not have a server URL file nor was in .csv format for use of the download.file command. 
 # To download the spatial data for reptiles, I visited http://www.iucnredlist.org/technical-documents/spatial-data.
@@ -72,13 +32,14 @@ Turtle_status<-iucn_status(ia) # "species_iucn" is the name of the dataframe ful
 
 write.csv(Turtle_status, file="./Data/Turtle_status.csv")
 
-## Include the info into the data frame
+## Include the info into the data frame (species_iucn=Turtle_status)
 Turtle_status<-read.csv("./Data/Turtle_status.csv")
-colnames(Turtle_status) <- c("species","status")
+
+colnames(Turtle_status) <- c("Binomial","iucn")
 
 Testudines$iucn<-Turtle_status
 
-Turtle_status[,c("species","status")]
+Turtle_status[,c("Binomial","iucn")]
 
 iucn_df<-data.frame(species=Turtle_status$species,
                     status=Turtle_status$status)
@@ -92,12 +53,12 @@ class(ia)
 head(species_iucn)
 tail(species_iucn)
 
-unique(species_iucn) # Gives us the unique IUCN categories. No numbers, though. 
-table(species_iucn) # Gives us a useful table showing the distribution of taxa over IUCN categories.
+unique(Turtle_status) # Gives us the unique IUCN categories. No numbers, though. 
+table(Turtle_status) # Gives us a useful table showing the distribution of taxa over IUCN categories.
 
 ## Interestingly, we have some categories which are outdated. We need to get rid of these. 
 # Which species are included in these outdated categories? 
-species_iucn[which(species_iucn=="LR/lc")]
+Turtle_status[which(Turtle_status=="LR/lc")]
 
 # I now need to rename the outdated categories 
 species_iucn[which(species_iucn=="LR/cd")]<-"NT"
@@ -144,10 +105,6 @@ gbif_records <-gbif_records[!dups, ]
 # Merging Data Frames ------------------------------------------------------------------------------
 # Now that we have all of our data loaded I need to put all of them into one dataframe for them to be usable. 
 iucn_df<-data.frame(Binomial=names(species_iucn),status=species_iucn)
-
-iucn_df[which(iucn_df=="LR/cd")]<-"NT"
-iucn_df[which(iucn_df=="LR/nt")]<-"NT"
-iucn_df[which(iucn_df=="LR/lc")]<-"LC"
 
 # To merge the turtle amniote data and iucn data 
 Turtle_Lifehistory_df<-merge(Testudines, iucn_df, by.x="species", by.y="Binomial")
