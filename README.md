@@ -112,3 +112,6 @@ can have a colored scatterplot
 
 5/1/18 Update
 Tidying up the data. I want to finish up the code soon. I need to finish data exploration to find interesting relationships and then make some maps that show these trends. Perhaps some scatterplots showing relationships as well. 
+
+5/3/2018 Update
+Begun writing rmarkdown. I will want to write a powerpoint version. Presentations are 5 minutes long. It's in an ignite format, which means 10 slides, 30 seconds for each slide. 

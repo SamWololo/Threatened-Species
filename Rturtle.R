@@ -1,11 +1,35 @@
 # Libraries -------------------------------------------------------------------------------------------
-library(rredlist)
-library(tidyverse)
-library(foreach)
-library(dismo)
-library(speciesgeocodeR)
-library(taxize)
-library(plyr)
+if(!require(rredlist)) {
+  install.packages("rredlist");
+  require(rredlist)}
+
+if(!require(tidyverse)) {
+  install.packages("tidyverse");
+  require(tidyverse)}
+
+if(!require(foreach)) {
+  install.packages("foreach");
+  require(foreach)}
+
+if(!require(dismo)) {
+  install.packages("dismo");
+  require(dismo)}
+
+if(!require(speciesgeocodeR)) {
+  install.packages("speciesgeocodeR");
+  require(speciesgeocodeR)}
+
+if(!require(taxize)) {
+  install.packages("taxize");
+  require(taxize)}
+
+if(!require(plyr)) {
+  install.packages("plyr");
+  require(plyr)}
+
+if(!require(cellranger)) {
+  install.packages("cellranger");
+  require(cellranger)}
 
 # Data ------------------------------------------------------------------------------------------------
 ## To download amniote data
@@ -31,23 +55,25 @@ Testudines<-
 ## With my IUCN API key
 Sys.setenv(IUCN_REDLIST_KEY="79326e37e61929e5349ff01eaef7da1a0a8a9003583714d5282227332875d576")
 
-## Here I add a new vector into the Testudines amniote dataframe: species names under the title "Binomial" 
 Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
 
-ia <- iucn_summary(Testudines$Binomial) ## WARNING: This script loads all the taxa for Testudines ~30 mins
-species_iucn<-iucn_status(ia) # creates an object out of these unpacked taxa
-write.csv(species_iucn, file="./Data/Base/Turtle_iucn_data.csv")
+# ia is a list of summaries. This is NOT an object, so you can't turn it into a .csv
+ia <- iucn_summary(Testudines$Binomial) ## WARNING: This script loads all the taxa for Testudines ~10 mins
+#This unpacks ia so that we're just looking at the status
+Turtle_status<-iucn_status(ia) # "species_iucn" is the name of the dataframe full of turtle statuses
 
-## Include the IUCN information into the turtle amniote data frame
-Testudines<-read.csv("./Data/Processed/Turtle_iucn.csv")
+write.csv(Turtle_status, file="./Data/Turtle_status.csv")
 
-Testudines$iucn<-species_iucn
+## Include the info into the data frame
+Turtle_status<-read.csv("./Data/Turtle_status.csv")
+colnames(Turtle_status) <- c("species","status")
 
-colnames(Testudines) <- c("species","status")
+Testudines$iucn<-Turtle_status
 
-Testudines[,c("Binomial","iucn")]
+Turtle_status[,c("species","status")]
 
-iucn_df<-data.frame(species=names(species_iucn),status=species_iucn)
+iucn_df<-data.frame(species=Turtle_status$species,
+                    status=Turtle_status$status)
 
 # Exploring the data
 head(ia)
@@ -165,31 +191,6 @@ cols_status<-cols[All_Dataframes_df$status]
 plot(wrld_simpl, xlim=c(min(All_Dataframes_df$lon)-1,max(All_Dataframes_df$lon)+1), ylim=c(min(All_Dataframes_df$lat)-1,max(All_Dataframes_df$lat)+1), axes=TRUE, col="light yellow")
 points(All_Dataframes_df$lon, All_Dataframes_df$lat, col=cols_status, pch=16, cex=0.75)
 legend("top",fill=cols,legend = levels(All_Dataframes_df$status),horiz=TRUE)
-
-# can open presentation with this graph, say: I expected there to be a latitudinal relationship-not so
-# can talk aobut how Russia has no data, make a case for data sharing
-# check for plot continuous variables in a map for a chromatic scale which I can tie to occurrence of data
-
-# use this graph as a jumping off point. 
-# look at the graph gallery for inspiration. r-graph-gallery.com
-
-# for the presentation you need a couple of graphics that makes you summarise data (tables too), then one
-# about the vulnerability of turtles. This was my question and this was what I found. 
-
-#most sampling in europe and US.
-
-# so as part of the final project you need to clean it up. In the final project, the final code you just
-# include the code that you need to produce the plots you want. 
-
-# maybe split up threatened species by norhern hemisphere and south? select all the points of the tropics
-# between 15 and -15 in latitude and call those tropics. call the rest temperate. 
-
-# can collapse some of the status. don't overwrite in object "status", just make a status2. then 
-# see how this data looks
-
-#can create a raster for how many species of turtles i have per pixel - not necessary though
-# use other graphs to show relationships between variables and IUCN status
-# can have a colored scatterplot
 
 # by country
 All_Dataframes_df %>% 
