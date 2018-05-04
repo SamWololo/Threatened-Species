@@ -31,6 +31,14 @@ if(!require(cellranger)) {
   install.packages("cellranger");
   require(cellranger)}
 
+if(!require(maptools)) {
+  install.packages("maptools");
+  require(maptools)}
+
+if(!require(RColorBrewer)) {
+  install.packages("RcolorBrewer");
+  require(RColorBrewer)}
+
 # Data ------------------------------------------------------------------------------------------------
 ## To download amniote data
 download.file("http://www.esapubs.org/archive/ecol/E096/269/Data_Files/Amniote_Database_Aug_2015.csv", 
@@ -133,16 +141,19 @@ gbif_records<-
 dups=duplicated(gbif_records[, c("lon", "lat", "country")])
 gbif_records <-gbif_records[!dups, ]
 
-## Merging data frames
-# Now that we have all of our data loaded I need to put all of them in one dataframe for them to be usable. 
-iucn_df<-data.frame(species=names(species_iucn),status=species_iucn)
+# Merging Data Frames ------------------------------------------------------------------------------
+# Now that we have all of our data loaded I need to put all of them into one dataframe for them to be usable. 
+iucn_df<-data.frame(Binomial=names(species_iucn),status=species_iucn)
+
+iucn_df[which(iucn_df=="LR/cd")]<-"NT"
+iucn_df[which(iucn_df=="LR/nt")]<-"NT"
+iucn_df[which(iucn_df=="LR/lc")]<-"LC"
 
 # To merge the turtle amniote data and iucn data 
-Turtle_Lifehistory_df<-merge(Testudines, iucn_df, by.x="Binomial", by.y="species")
-# To merge the previous merger with gbif records 
-All_Dataframes_df<-merge(Turtle_Lifehistory_df, gbif_records, by.x="Binomial", by.y="species")
+Turtle_Lifehistory_df<-merge(Testudines, iucn_df, by.x="species", by.y="Binomial")
 
-View(All_Dataframes_df)
+# To merge the previous merger with gbif records 
+All_Dataframes_df<-merge(Testudines, gbif_records, by.x="species", by.y="Binomial")
 
 write.csv(All_Dataframes_df, file="./Data/Processed/Clean_Turtle_Lifehistory_Data.csv")
 
@@ -179,8 +190,6 @@ All_Dataframes_df %>%
 ###write down my variables. use worldsmpl for maps to plot occurrences. rasters for biomes is OK too
 ### 
 
-library(maptools)
-library(RColorBrewer)
 data(wrld_simpl)
 
 #cols contain the names of 3 different colors

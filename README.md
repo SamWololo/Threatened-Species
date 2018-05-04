@@ -115,3 +115,5 @@ Tidying up the data. I want to finish up the code soon. I need to finish data ex
 
 5/3/2018 Update
 Begun writing rmarkdown. I will want to write a powerpoint version. Presentations are 5 minutes long. It's in an ignite format, which means 10 slides, 30 seconds for each slide. 
+Made improvements throughout the Rcode. Libraries reproducible now. I will make a separate file for them later. 
+Having great difficulty merging my dataframes. 
