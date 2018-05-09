@@ -39,7 +39,11 @@ species_iucn<-iucn_status(ia) # creates an object out of these unpacked taxa
 write.csv(species_iucn, file="./Data/Base/Turtle_iucn_data.csv")
 
 ## Include the IUCN information into the turtle amniote data frame
-Testudines<-read.csv("./Data/Processed/Turtle_iucn.csv")
+IUCN<-read.csv("./Data/amniote_IUCN.csv")
+Turtle_iucn<-
+  IUCN %>% 
+  filter(class == "Reptilia" & order =="Testudines")
+
 
 Testudines$iucn<-species_iucn
 
@@ -66,12 +70,12 @@ table(species_iucn) # Gives us a useful table showing the distribution of taxa o
 species_iucn[which(species_iucn=="LR/lc")]
 
 # I now need to rename the outdated categories 
-species_iucn[which(species_iucn=="LR/cd")]<-"NT"
-species_iucn[which(species_iucn=="LR/nt")]<-"NT"
-species_iucn[which(species_iucn=="LR/lc")]<-"LC"
+Turtle_iucn[which(Turtle_iucn=="LR/cd")]<-"NT"
+Turtle_iucn[which(Turtle_iucn=="LR/nt")]<-"NT"
+Turtle_iucn[which(Turtle_iucn=="LR/lc")]<-"LC"
 
 # Let's see what our table looks like now: 
-table(species_iucn)
+table(Turtle_iucn)
 
 # GBIF Data using Loops -------------------------------------------------------------------------------
 # Getting values of occurrences of the order Testudines
@@ -109,7 +113,7 @@ gbif_records <-gbif_records[!dups, ]
 
 ## Merging data frames
 # Now that we have all of our data loaded I need to put all of them in one dataframe for them to be usable. 
-iucn_df<-data.frame(species=names(species_iucn),status=species_iucn)
+iucn_df<-data.frame(species=names(Turtle_iucn),status=Turtle_iucn)
 
 # To merge the turtle amniote data and iucn data 
 Turtle_Lifehistory_df<-merge(Testudines, iucn_df, by.x="Binomial", by.y="species")

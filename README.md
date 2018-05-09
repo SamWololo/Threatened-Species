@@ -117,3 +117,9 @@ Tidying up the data. I want to finish up the code soon. I need to finish data ex
 Begun writing rmarkdown. I will want to write a powerpoint version. Presentations are 5 minutes long. It's in an ignite format, which means 10 slides, 30 seconds for each slide. 
 Made improvements throughout the Rcode. Libraries reproducible now. 
 Having great difficulty merging my dataframes. 
+Note:I changed the column names of Turtle_status in the .csv. This makes this df not reproducible. I need to figure this out before I turn it in.  
+Table of the occurrence map is outdated. Map has correct pts
+
+5/9/2018
+Dividing project into different .R files. So far I have libraries, data processing and then the graphical analysis. I need to make it clear that the data processing part shouldn't be run upon evaluation. I will be putting a line of code to run the iucn/gbif/amniote merged dataframe at the start of the graphical analysis portion of the script. 
+So far, I have a few boxplots and a graph. I've created some scatterplots as well. 
