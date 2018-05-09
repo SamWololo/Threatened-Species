@@ -6,17 +6,19 @@
 All_Dataframes_df<-read.csv("./Data/Processed/Clean_Turtle_Lifehistory_Data.csv")
 
 ## Combining group_by() and summarize() in a pipe to find interesting data about the dataframe. 
-### Mean body mass
+### Exploring mean body mass
 All_Dataframes_df %>% 
   group_by(iucn) %>% 
   dplyr::summarise(N_sp=n_distinct(Binomial),  # add dplyr because summarise belongs to two packages
                    Weight_avg=mean(adult_body_mass_g, na.rm=TRUE))
+
 # Graphing log bodymass by IUCN status 
 pdf("./Figures/boxplot_IUCN_logmass.pdf")
 ggplot(data=All_Dataframes_df, aes(x=iucn,y=log(adult_body_mass_g)))+
   geom_boxplot()
 dev.off()
 
+# Graphing average log bodymass by IUCN status
 pdf("./Figures/boxplot_IUCN_logweight.pdf")
 All_Dataframes_df %>% 
   group_by(Binomial) %>% 
@@ -36,10 +38,9 @@ All_Dataframes_df %>%
                    status_iucn=unique(iucn))
   
 
-## Maps
+# Displaying maps and points ---------------------
 
 ###write down my variables. use worldsmpl for maps to plot occurrences. rasters for biomes is OK too
-### 
 
 data(wrld_simpl)
 
@@ -48,7 +49,7 @@ cols<-brewer.pal(n=n_distinct(All_Dataframes_df$iucn),name="Set1")
 cols_status<-cols[All_Dataframes_df$iucn]
 
 png("./Figures/map_occurrence_by_status.png")
-plot(wrld_simpl, xlim=c(min(All_Dataframes_df$lon)-1,max(All_Dataframes_df$lon)+1), ylim=c(min(All_Dataframes_df$lat)-1,max(All_Dataframes_df$lat)+1), axes=TRUE, col="light yellow")
+plot(wrld_simpl, xlim=c(min(All_Dataframes_df$lon)-1,max(All_Dataframes_df$lon)+1), ylim=c(min(All_Dataframes_df$lat)-1,max(All_Dataframes_df$lat)+1), axes=TRUE, col="light cyan")
 points(All_Dataframes_df$lon, All_Dataframes_df$lat, col=cols_status, pch=16, cex=0.75)
 legend("top",fill=cols,legend = levels(All_Dataframes_df$iucn),horiz=TRUE)
 dev.off()

@@ -1,0 +1,57 @@
+---
+title: "Threatened_Species_Rmarkdown"
+author: "Samuel Wolf"
+date: "May 9, 2018"
+output: 
+  html_document:
+    highlight: tango
+    theme: journal
+    toc: yes
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r libraries, message=FALSE, warning=FALSE, include=TRUE}
+
+library(rredlist)
+library(tidyverse)
+library(foreach)
+library(dismo)
+library(speciesgeocodeR)
+library(taxize)
+library(plyr)
+library(cellranger)
+library(maptools)
+library(RColorBrewer)
+library(ggplot2)
+library(knitr)
+
+```
+
+# Correlation between life-history traits of Testudines and extinction risk
+###  Can the IUCN status of turtles be predicted from their life-history traits? This study also seeks draw the relationship between IUCN status in the order Testudinesa to their geographic range. 
+First two lines should be pretty broad background. Why it matters, etc. Get about 3 paragraphs down. 
+Life-history and extinction rates correlates of turtles
+
+Dwindling numbers of terrestrial, riverine and marine turtles signal a threat to biodiversity in global ecosystems. In Asia, traditional medicines and growing meat markets have caused high extinction risks. Of the world's top 25 endangered tortoises and freshwater turtles, 18 are native to Southeast Asia. (Rhodin et al. 2011) In marine turtles, accounts of decline are largely based on lack of data and have. (Spotila et al. 2000) The high prevalence of threatened turtle species and disparity in data calls for a model that can identiy species at risk of extinction. 
+
+
+## Brief description of the methods
+
+Using the Amniote life-history [database](http://www.esapubs.org/archive/ecol/E096/269/#data), I attempted to collect, filter and refine information regarding turtle life-history. I analyzed the data with RStudio using the package tidyverse. 
+I also used the IUCN spatial [data]
+This is how I downloaded the data. These are the packages I used to do it. And here it is.. Dedicate a paragraph to each one. 
+IUCN ... [2.data_download_and_processing.R](https://github.com/SamWololo/Threatened-Species/blob/master/2.%20data%20download%20and%20processing.R) 
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+Spotila JR, Reina RD, Steyermark AC, Plotkin PT, Paladino FV. Pacific leatherback turtles face extinction. Nature. 2000 Jun;405(6786):529.
