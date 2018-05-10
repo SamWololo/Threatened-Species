@@ -25,7 +25,9 @@ All_Dataframes_df %>%
                    status_iucn=unique(iucn)) %>% 
   ggplot(aes(x=status_iucn,y=log(Weight_avg), fill=status_iucn))+
   geom_boxplot(alpha=0.3)+
-  theme(legend.position = "none")
+  theme(legend.position = "none")+
+  ylab("Log Body Mass (g)") +
+  xlab("IUCN Status")
 dev.off()
 
 # create 2 dataframes, one aminote and IUCN, then the alldata with gbif only when I want maps
@@ -48,7 +50,7 @@ data(wrld_simpl)
 cols<-brewer.pal(n=n_distinct(All_Dataframes_df$iucn),name="Set1")
 cols_status<-cols[All_Dataframes_df$iucn]
 
-ppdf("./Figures/map_occurrence_by_status.pdf")
+pdf("./Figures/map_occurrence_by_status.pdf")
 plot(wrld_simpl, xlim=c(min(All_Dataframes_df$lon)-1,max(All_Dataframes_df$lon)+1), ylim=c(min(All_Dataframes_df$lat)-1,max(All_Dataframes_df$lat)+1), axes=TRUE, col="light cyan")
 points(All_Dataframes_df$lon, All_Dataframes_df$lat, col=cols_status, pch=16, cex=0.75)
 legend("top",fill=cols,legend = levels(All_Dataframes_df$iucn),horiz=TRUE)
@@ -104,13 +106,22 @@ ggplot(All_Dataframes_df,aes(x=female_maturity_d, y=incubation_d)) +
 dev.off()
 
 
+# Create a color palette by factor:
+mypalette = colorFactor( palette="YlOrBr", domain=All_Dataframes_df$iucn, na.color="transparent")
 
-pdf("./Figures/boxplot_IUCN_logweight.pdf")
-All_Dataframes_df %>% 
-  group_by(Binomial) %>% 
-  dplyr::summarise(Weight_avg=mean(adult_body_mass_g, na.rm=TRUE),
-                   status_iucn=unique(iucn)) %>% 
-  ggplot(aes(x=status_iucn,y=log(Weight_avg), fill=status_iucn))+
-  geom_boxplot(alpha=0.3)+
-  theme(legend.position = "none")
-dev.off()
+# Prepare the text for the tooltip:
+mytext=paste("Status: ", All_Dataframes_df$iucn, "<br/>", "Species: ", All_Dataframes_df$Binomial, "<br/>", "Bodymass (g): ", All_Dataframes_df$adult_body_mass_g, sep="") %>%
+  lapply(htmltools::HTML)
+
+# Final Map
+leaflet(All_Dataframes_df) %>% 
+  addTiles()  %>% 
+  setView( lat=-27, lng=170 , zoom=4) %>%
+  addProviderTiles("Esri.WorldImagery") %>%
+  addCircleMarkers(~lon, ~lat, 
+                   fillColor = ~mypalette(iucn), fillOpacity = 0.7, color="white", radius=8, stroke=FALSE,
+                   label = mytext,
+                   labelOptions = labelOptions( style = list("font-weight" = "normal", padding = "3px 8px"), textsize = "13px", direction = "auto")
+  ) %>%
+  addLegend( pal=mypalette, values=~iucn, opacity=0.9, title = "IUCN Status", position = "bottomright" )
+
