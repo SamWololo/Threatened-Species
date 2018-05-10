@@ -123,3 +123,7 @@ Table of the occurrence map is outdated. Map has correct pts
 5/9/2018
 Dividing project into different .R files. So far I have libraries, data processing and then the graphical analysis. I need to make it clear that the data processing part shouldn't be run upon evaluation. I will be putting a line of code to run the iucn/gbif/amniote merged dataframe at the start of the graphical analysis portion of the script. 
 So far, I have a few boxplots and a graph. I've created some scatterplots as well. 
+
+I have begun my project write-up in html Rmarkdown format. So far I have begun writing an introduction, but am struggling to open up on my project. The angle I'm thinking of is why we should be concerned about turtle conservation - why the project matters. This can segue into the next paragraph which might be about the macroecological tools I used, though this may become repetitive when in concert with the methods section. 
+
+I am struggling to make a table of IUCN statuses, which I once had. I am now getting a table of 273 rows, but I only want something that describes how many species I have for each status. I need to ask about this tomorrow. 
