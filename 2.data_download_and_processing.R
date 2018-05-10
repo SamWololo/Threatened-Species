@@ -46,17 +46,17 @@ Testudines$iucn<-Turtle_status
 
 Turtle_status[,c("Binomial","iucn")]
 
-iucn_df<-data.frame(species=Turtle_status$species,
-                    status=Turtle_status$status)
-
-# Exploring the data
+## Exploring the data
 class(Turtle_status)
 
 head(Turtle_status)
 tail(Turtle_status)
 
-unique(Turtle_status) # Gives us the unique IUCN categories. No numbers, though. 
-table(Turtle_status) # Gives us a useful table showing the distribution of taxa over IUCN categories.
+table(Turtle_status$iucn) # Gives us the unique IUCN categories. No numbers, though. 
+
+iucn_count <- Turtle_status %>%
+  group_by(iucn)%>%
+  summarize(count=n()) # Gives us a useful table showing the distribution of taxa over IUCN categories.
 
 ## Interestingly, we have some categories which are outdated. We need to get rid of these. 
 # Which species are included in these outdated categories? 

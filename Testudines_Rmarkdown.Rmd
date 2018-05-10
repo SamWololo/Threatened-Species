@@ -23,12 +23,12 @@ library(foreach)
 library(dismo)
 library(speciesgeocodeR)
 library(taxize)
-library(plyr)
 library(cellranger)
 library(maptools)
 library(RColorBrewer)
 library(ggplot2)
 library(knitr)
+library(dplyr)
 
 ```
 
@@ -42,14 +42,7 @@ Dwindling numbers of terrestrial, riverine and marine turtles signal a threat to
 
 ## Brief description of the methods
 ### Amniote Life-History Data
-I collected turtle life-history data by downloading an amniote life-history [database](http://www.esapubs.org/archive/ecol/E096/269/#data). 
-
-```{r}
-download.file("http://www.esapubs.org/archive/ecol/E096/269/Data_Files/Amniote_Database_Aug_2015.csv
-", "./Data/Amniote_Database_Aug_2015.csv")
-```
-
-The amniote dataframe by Myhrvold et al.(2015) included 21322 objects with 36 variables.  I analyzed these data with RStudio using the tidyverse package. 
+I collected turtle life-history data by downloading the Amniote_Database_Aug_2015.csv life-history [database](http://www.esapubs.org/archive/ecol/E096/269/#data). The amniote dataframe by Myhrvold et al.(2015) included 21322 objects with 36 variables.  I analyzed these data with RStudio using the tidyverse package. 
 
 ```{r}
 # Read amniote data
@@ -80,9 +73,18 @@ colnames(Turtle_status) <- c("Binomial","iucn")
 Testudines$iucn<-Turtle_status
 ```
 
-The IUCN Red List categories changed in 1994. The dataframe contained records prior to the 2001 system, the one that is relevant to this study, which required some renaming of old categories. Categories "Near Threatened" and "Least Concern" became their own categories while "Conservation Dependent" was merged into "Near Threatened". 
-```{r}
-kable(Turtle_status)
+The dataframe contained IUCN categories that existed prior to the 2001 system, the one that is relevant for this study. Because these datapoints remained, it required the renaming of old categories. 
+
+```{r echo=FALSE}
+table(Turtle_status$iucn)
+```
+Categories "Near Threatened" and "Least Concern" became their own categories while "Conservation Dependent" was merged into "Near Threatened". 
+```{r echo=TRUE}
+# To rename outdated categories 
+Turtle_status$iucn[which(Turtle_status$iucn=="LR/cd")]<-"NT"
+Turtle_status$iucn[which(Turtle_status$iucn=="LR/nt")]<-"NT"
+Turtle_status$iucn[which(Turtle_status$iucn=="LR/lc")]<-"LC"
+table(Turtle_status$iucn)
 
 ```
 

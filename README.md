@@ -127,3 +127,7 @@ So far, I have a few boxplots and a graph. I've created some scatterplots as wel
 I have begun my project write-up in html Rmarkdown format. So far I have begun writing an introduction, but am struggling to open up on my project. The angle I'm thinking of is why we should be concerned about turtle conservation - why the project matters. This can segue into the next paragraph which might be about the macroecological tools I used, though this may become repetitive when in concert with the methods section. 
 
 I am struggling to make a table of IUCN statuses, which I once had. I am now getting a table of 273 rows, but I only want something that describes how many species I have for each status. I need to ask about this tomorrow. 
+
+Questions For Susy: 
+How to make table (I managed but the old vectors remain - why?)
+Is how I reference my dataframes ok? Good for reproducibility and legibility?
