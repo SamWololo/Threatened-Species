@@ -28,7 +28,6 @@ library(maptools)
 library(RColorBrewer)
 library(ggplot2)
 library(knitr)
-library(dplyr)
 
 ```
 
@@ -78,6 +77,7 @@ The dataframe contained IUCN categories that existed prior to the 2001 system, t
 
 ```{r echo=TRUE}
 table(Turtle_status$iucn)
+
 ```
 Categories "Near Threatened" and "Least Concern" became their own categories while "Conservation Dependent" was merged into "Near Threatened". 
 ```{r echo=TRUE}
@@ -103,7 +103,7 @@ gbif_records<-
   dplyr::filter(!is.na(lon)&!is.na(lat))%>%
   dplyr::select(lon, lat, species, country) 
 ```
-This yielded a dataframe still with 82837 occurrences but with only 4 variables: 
+This yielded a dataframe still with 82837 occurrences but with only 4 variables. These variables are: 
 ```{r echo=FALSE}
 names(gbif_records)
 
@@ -130,6 +130,46 @@ write.csv(All_Dataframes_df, file="./Data/Processed/Clean_Turtle_Lifehistory_Dat
 
 
 # Results and Discussion
+```{r}
+All_Dataframes_df<-read.csv("./Data/Processed/Clean_Turtle_Lifehistory_Data.csv")
+
+```
+
+```{r}
+All_Dataframes_df %>% 
+  group_by(Binomial) %>% 
+  dplyr::summarise(Weight_avg=mean(adult_body_mass_g, na.rm=TRUE),
+                   status_iucn=unique(iucn)) %>% 
+  ggplot(aes(x=status_iucn,y=log(Weight_avg)))+
+  geom_boxplot()
+```
+
+```{r}
+# Relationship between longevity and body size among turtles
+Testudines %>% 
+  ggplot(aes(x=maximum_longevity_y, y=log(adult_body_mass_g))) + 
+  geom_density2d()+ #Too many orders to separate by color
+  stat_smooth() +
+  ylab("Log Adult Body Mass (g)") +
+  xlab("Longevity (years)")
+```
+
+### Data distribution
+```{r}
+# Get map
+data(wrld_simpl)
+
+# Color vector
+cols<-brewer.pal(n=n_distinct(All_Dataframes_df$iucn),name="Set1")
+cols_status<-cols[All_Dataframes_df$iucn]
+
+# To plot map and get turtle distribution
+plot(wrld_simpl, xlim=c(min(All_Dataframes_df$lon)-1,max(All_Dataframes_df$lon)+1), ylim=c(min(All_Dataframes_df$lat)-1,max(All_Dataframes_df$lat)+1), axes=TRUE, col="light cyan")
+points(All_Dataframes_df$lon, All_Dataframes_df$lat, col=cols_status, pch=16, cex=0.75)
+legend("top",fill=cols,legend = levels(All_Dataframes_df$iucn),horiz=TRUE)
+
+```
+
 
 
 # References

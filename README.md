@@ -134,3 +134,4 @@ Questions For Susy:
 3. Continuation of the above question: gbif_records when loaded is huge, and slows the knitting by a lot. I need to run it to show that the cleaning works. 
 4. Is it OK to do output only?
 5. Is it OK to say "4 vectors"? Or do I have to name each vector? Name each species?
+6. Some of the data I link in the methods section has been put in the gitignore list. 

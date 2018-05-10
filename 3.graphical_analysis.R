@@ -2,9 +2,8 @@
 # Sam Wolf
 # Data Exploration
 
-# Data exploration ------------------------------------------------------------------------------------
 All_Dataframes_df<-read.csv("./Data/Processed/Clean_Turtle_Lifehistory_Data.csv")
-
+# Data exploration ------------------------------------------------------------------------------------
 ## Combining group_by() and summarize() in a pipe to find interesting data about the dataframe. 
 ### Exploring mean body mass
 All_Dataframes_df %>% 
@@ -24,8 +23,9 @@ All_Dataframes_df %>%
   group_by(Binomial) %>% 
   dplyr::summarise(Weight_avg=mean(adult_body_mass_g, na.rm=TRUE),
                    status_iucn=unique(iucn)) %>% 
-  ggplot(aes(x=status_iucn,y=log(Weight_avg)))+
-  geom_boxplot()
+  ggplot(aes(x=status_iucn,y=log(Weight_avg), fill=status_iucn))+
+  geom_boxplot(alpha=0.3)+
+  theme(legend.position = "none")
 dev.off()
 
 # create 2 dataframes, one aminote and IUCN, then the alldata with gbif only when I want maps
@@ -48,13 +48,13 @@ data(wrld_simpl)
 cols<-brewer.pal(n=n_distinct(All_Dataframes_df$iucn),name="Set1")
 cols_status<-cols[All_Dataframes_df$iucn]
 
-png("./Figures/map_occurrence_by_status.png")
+ppdf("./Figures/map_occurrence_by_status.pdf")
 plot(wrld_simpl, xlim=c(min(All_Dataframes_df$lon)-1,max(All_Dataframes_df$lon)+1), ylim=c(min(All_Dataframes_df$lat)-1,max(All_Dataframes_df$lat)+1), axes=TRUE, col="light cyan")
 points(All_Dataframes_df$lon, All_Dataframes_df$lat, col=cols_status, pch=16, cex=0.75)
 legend("top",fill=cols,legend = levels(All_Dataframes_df$iucn),horiz=TRUE)
 dev.off()
 
-# by country
+#  by country
 All_Dataframes_df %>% 
   group_by(litter_or_clutch_size_n) %>% 
   dplyr::summarise(N_sp=n_distinct(Binomial))  # dplyr because summarise belongs to two packages, gets confused
@@ -89,7 +89,28 @@ ggplot(All_Dataframes_df,aes(x=litter_or_clutch_size_n, y=egg_mass_g)) +
   geom_point(aes(colour=iucn, size=adult_body_mass_g), alpha=0.8)
 
 #Scatter
-png("./Figures/mass_by_eggmass_littersize.png")
-ggplot(All_Dataframes_df,aes(x=log(adult_body_mass_g), y=egg_mass_g)) + 
-  geom_point(aes(colour=iucn, size=litter_or_clutch_size_n), alpha=0.8)
+pdf("./Figures/bodymass_by_eggmass_clutchsize.pdf")
+ggplot(All_Dataframes_df,aes(x=log(adult_body_mass_g), y=log(egg_mass_g))) + 
+  geom_point(aes(colour=iucn, size=litter_or_clutch_size_n), alpha=0.8) +
+  ylab("Log Egg Mass (g)") +
+  xlab("Log Adult Body Mass (g)")
+dev.off()
+
+pdf("./Figures/bodymass_by_eggmass_littersize.pdf")
+ggplot(All_Dataframes_df,aes(x=female_maturity_d, y=incubation_d)) + 
+  geom_point(aes(colour=iucn, size=litter_or_clutch_size_n), alpha=0.8) +
+  ylab("Log Egg Mass (g)") +
+  xlab("Log Adult Body Mass (g)")
+dev.off()
+
+
+
+pdf("./Figures/boxplot_IUCN_logweight.pdf")
+All_Dataframes_df %>% 
+  group_by(Binomial) %>% 
+  dplyr::summarise(Weight_avg=mean(adult_body_mass_g, na.rm=TRUE),
+                   status_iucn=unique(iucn)) %>% 
+  ggplot(aes(x=status_iucn,y=log(Weight_avg), fill=status_iucn))+
+  geom_boxplot(alpha=0.3)+
+  theme(legend.position = "none")
 dev.off()
