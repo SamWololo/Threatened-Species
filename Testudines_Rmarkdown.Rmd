@@ -1,7 +1,7 @@
 ---
 title: "Threatened_Species_Rmarkdown"
 author: "Samuel Wolf"
-date: "May 9, 2018"
+date: "May 11, 2018"
 output: 
   html_document:
     highlight: tango
@@ -41,17 +41,60 @@ Dwindling numbers of terrestrial, riverine and marine turtles signal a threat to
 
 
 ## Brief description of the methods
+### Amniote Life-History Data
+I collected turtle life-history data by downloading an amniote life-history [database](http://www.esapubs.org/archive/ecol/E096/269/#data). 
 
-Using the Amniote life-history [database](http://www.esapubs.org/archive/ecol/E096/269/#data), I attempted to collect, filter and refine information regarding turtle life-history. I analyzed the data with RStudio using the package tidyverse. 
-I also used the IUCN spatial [data]
-This is how I downloaded the data. These are the packages I used to do it. And here it is.. Dedicate a paragraph to each one. 
-IUCN ... [2.data_download_and_processing.R](https://github.com/SamWololo/Threatened-Species/blob/master/2.%20data%20download%20and%20processing.R) 
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+download.file("http://www.esapubs.org/archive/ecol/E096/269/Data_Files/Amniote_Database_Aug_2015.csv
+", "./Data/Amniote_Database_Aug_2015.csv")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+The amniote dataframe by Myhrvold et al.(2015) included 21322 objects with 36 variables.  I analyzed these data with RStudio using the tidyverse package. 
 
+```{r}
+# Read amniote data
+Amniote<-read.csv("./Data/Amniote_Database_Aug_2015.csv")
+
+# Since there are many null values in the original data, represented as -999, these should be turned into NA's to make the it more readable. 
+Amniote[Amniote==-999]<-NA
+```
+
+Because most of the dataframe included taxa that were beyond the scope of the question, I refined it to filter information that did not contain information regarding turtle life-history. 
+
+```{r}
+# Filter amniote data to only include testudines
+Testudines<-
+  Amniote %>% 
+  filter(class == "Reptilia" & order =="Testudines")
+```
+
+### IUCN Spatial Data
+I also used the IUCN Red List Spatial Data  to access a large dataframe with a comprehensive assessment of threats to various taxonomic groups. The data  did not have a server URL file nor was in .csv format for use of the download.file command. To download the spatial data for reptiles, I visited [this](http://www.iucnredlist.org/technical-documents/spatial-data) website. The main dataset for reptiles was downloaded into the downloads folder of my personal computer, where it was then moved and unzipped in my Spatial Data folder.  For reproducibility, I then wrote it into a .csv and deposited it into my [repository](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R) on GitHub. The data was then unpacked using the taxize package, which required an IUCN Red List API. The application is at http://apiv3.iucnredlist.org/api/v3/token. 
+
+```{r}
+# Including spatial information into the data frame
+Turtle_status<-read.csv("./Data/Turtle_status.csv")
+
+colnames(Turtle_status) <- c("Binomial","iucn")
+
+Testudines$iucn<-Turtle_status
+```
+
+The IUCN Red List categories changed in 1994. The dataframe contained records prior to the 2001 system, the one that is relevant to this study, which required some renaming of old categories. Categories "Near Threatened" and "Least Concern" became their own categories while "Conservation Dependent" was merged into "Near Threatened". 
+```{r}
+kable(Turtle_status)
+
+```
+
+### GBIF Occurrence Data
+I also used the gbif spatial [data](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R) to find occurrence data for turtles. 
+This is how I downloaded the data. These are the packages I used to do it. And here it is.. Dedicate a paragraph to each one. 
+IUCN ... [2.data_download_and_processing.R]
+
+
+
+
+## References
+IUCN 2017. IUCN Red List of Threatened Species. Version 2017-3 <www.iucnredlist.org>
 
 Spotila JR, Reina RD, Steyermark AC, Plotkin PT, Paladino FV. Pacific leatherback turtles face extinction. Nature. 2000 Jun;405(6786):529.

@@ -11,6 +11,7 @@
 
 <meta name="author" content="Samuel Wolf" />
 
+<meta name="date" content="2018-05-11" />
 
 <title>Threatened_Species_Rmarkdown</title>
 
@@ -146,15 +147,20 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Threatened_Species_Rmarkdown</h1>
 <h4 class="author"><em>Samuel Wolf</em></h4>
-<h4 class="date"><em>May 9, 2018</em></h4>
+<h4 class="date"><em>May 11, 2018</em></h4>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#exploring-the-relationship-between-life-history-traits-of-the-order-testudines-and-their-iucn-status">Exploring the relationship between life-history traits of the order Testudines and their IUCN status</a><ul>
-<li><a href="#can-the-risk-of-extinction-be-predicted-in-turtles-from-their-life-history-traits-this-study-seeks-also-seeks-to-correlate-iucn-status-in-the-order-testudinesa-to-their-geographic-range.">Can the risk of extinction be predicted in turtles from their life-history traits? This study seeks also seeks to correlate IUCN status in the order Testudinesa to their geographic range.</a></li>
-<li><a href="#brief-description-of-the-methods">Brief description of the methods</a></li>
+<li><a href="#correlation-between-life-history-traits-of-testudines-and-extinction-risk">Correlation between life-history traits of Testudines and extinction risk</a><ul>
+<li><a href="#can-the-iucn-status-of-turtles-be-predicted-from-their-life-history-traits-this-study-also-seeks-draw-the-relationship-between-iucn-status-in-the-order-testudinesa-to-their-geographic-range.">Can the IUCN status of turtles be predicted from their life-history traits? This study also seeks draw the relationship between IUCN status in the order Testudinesa to their geographic range.</a></li>
+<li><a href="#brief-description-of-the-methods">Brief description of the methods</a><ul>
+<li><a href="#amniote-life-history-data">Amniote Life-History Data</a></li>
+<li><a href="#iucn-spatial-data">IUCN Spatial Data</a></li>
+<li><a href="#gbif-occurrence-data">GBIF Occurrence Data</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
 </ul></li>
 </ul>
 </div>
@@ -171,18 +177,1150 @@ $(document).ready(function () {
 <span class="kw">library</span>(RColorBrewer)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(knitr)</code></pre></div>
-<div id="exploring-the-relationship-between-life-history-traits-of-the-order-testudines-and-their-iucn-status" class="section level1">
-<h1>Exploring the relationship between life-history traits of the order Testudines and their IUCN status</h1>
-<div id="can-the-risk-of-extinction-be-predicted-in-turtles-from-their-life-history-traits-this-study-seeks-also-seeks-to-correlate-iucn-status-in-the-order-testudinesa-to-their-geographic-range." class="section level2">
-<h2>Can the risk of extinction be predicted in turtles from their life-history traits? This study seeks also seeks to correlate IUCN status in the order Testudinesa to their geographic range.</h2>
-<p>First two lines should be pretty broad background. Why it matters, etc.</p>
+<div id="correlation-between-life-history-traits-of-testudines-and-extinction-risk" class="section level1">
+<h1>Correlation between life-history traits of Testudines and extinction risk</h1>
+<div id="can-the-iucn-status-of-turtles-be-predicted-from-their-life-history-traits-this-study-also-seeks-draw-the-relationship-between-iucn-status-in-the-order-testudinesa-to-their-geographic-range." class="section level3">
+<h3>Can the IUCN status of turtles be predicted from their life-history traits? This study also seeks draw the relationship between IUCN status in the order Testudinesa to their geographic range.</h3>
+<p>First two lines should be pretty broad background. Why it matters, etc. Get about 3 paragraphs down. Life-history and extinction rates correlates of turtles</p>
+<p>Dwindling numbers of terrestrial, riverine and marine turtles signal a threat to biodiversity in global ecosystems. In Asia, traditional medicines and growing meat markets have caused high extinction risks. Of the world’s top 25 endangered tortoises and freshwater turtles, 18 are native to Southeast Asia. (Rhodin et al. 2011) In marine turtles, accounts of decline are largely based on lack of data and have. (Spotila et al. 2000) The high prevalence of threatened turtle species and disparity in data calls for a model that can identiy species at risk of extinction.</p>
 </div>
 <div id="brief-description-of-the-methods" class="section level2">
 <h2>Brief description of the methods</h2>
-<p>Using the Amniote life-history <a href="http://www.esapubs.org/archive/ecol/E096/269/#data">database</a>, I attempted to answer questions regarding amniote life-history. I analyzed the data using RStudio, and formatted my scripts with Rmarkdown.</p>
-<p>This is how I downloaded the data. These are the packages I used to do it. And here it is.. Dedicate a paragraph to each one. IUCN … <a href="https://github.com/SamWololo/Threatened-Species/blob/master/2.%20data%20download%20and%20processing.R">2.data_download_and_processing.R</a></p>
-<p><img src="data:image/png;base64,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" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+<div id="amniote-life-history-data" class="section level3">
+<h3>Amniote Life-History Data</h3>
+<p>I collected turtle life-history data by downloading an amniote life-history <a href="http://www.esapubs.org/archive/ecol/E096/269/#data">database</a>. The amniote dataframe by Myhrvold et al.(2015) included 21322 objects with 36 variables. I analyzed these data with RStudio using the tidyverse package. Because most of the dataframe included taxa that were beyond the scope of the question, I refined it to filter information that did not contain information regarding turtle life-history.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read amniote data</span>
+Amniote&lt;-<span class="kw">read.csv</span>(<span class="st">&quot;./Data/Amniote_Database_Aug_2015.csv&quot;</span>)
+Amniote[Amniote<span class="op">==-</span><span class="dv">999</span>]&lt;-<span class="ot">NA</span></code></pre></div>
+<p>Because most of the dataframe included taxa that were beyond the scope of the question, I refined it to filter information that did not contain information regarding turtle life-history.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Filter amniote data to only include testudines</span>
+Testudines&lt;-
+<span class="st">  </span>Amniote <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(class <span class="op">==</span><span class="st"> &quot;Reptilia&quot;</span> <span class="op">&amp;</span><span class="st"> </span>order <span class="op">==</span><span class="st">&quot;Testudines&quot;</span>)</code></pre></div>
+</div>
+<div id="iucn-spatial-data" class="section level3">
+<h3>IUCN Spatial Data</h3>
+<p>I also used the IUCN Red List Spatial Data to access a large dataframe with a comprehensive assessment of threats to various taxonomic groups. The data did not have a server URL file nor was in .csv format for use of the download.file command. To download the spatial data for reptiles, I visited <a href="http://www.iucnredlist.org/technical-documents/spatial-data">this</a> website. The main dataset for reptiles was downloaded into the downloads folder of my personal computer, where it was then moved and unzipped in my Spatial Data folder. For reproducibility, I then wrote it into a .csv and deposited it into my <a href="https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R">repository</a> on GitHub. The data was then unpacked using the taxize package, which required an IUCN Red List API. The application is at <a href="http://apiv3.iucnredlist.org/api/v3/token" class="uri">http://apiv3.iucnredlist.org/api/v3/token</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Including spatial information into the data frame</span>
+Turtle_status&lt;-<span class="kw">read.csv</span>(<span class="st">&quot;./Data/Turtle_status.csv&quot;</span>)
+
+<span class="kw">colnames</span>(Turtle_status) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Binomial&quot;</span>,<span class="st">&quot;iucn&quot;</span>)
+
+Testudines<span class="op">$</span>iucn&lt;-Turtle_status</code></pre></div>
+<p>The IUCN Red List categories changed in 1994. The dataframe contained records prior to the 2001 system, the one that is relevant to this study, which required some renaming of old categories. Categories “Near Threatened” and “Least Concern” became their own categories while “Conservation Dependent” was merged into “Near Threatened”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kable</span>(Turtle_status)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Binomial</th>
+<th align="left">iucn</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Carettochelys insculpta</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Acanthochelys pallidipectoris</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Acanthochelys spixii</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="even">
+<td align="left">Chelodina canni</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Chelodina expansa</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Chelodina longicollis</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Chelodina mccordi</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Chelodina novaeguineae</td>
+<td align="left">LR/lc</td>
+</tr>
+<tr class="odd">
+<td align="left">Chelodina oblonga</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="even">
+<td align="left">Chelodina parkeri</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Chelodina reimanni</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="even">
+<td align="left">Chelus fimbriatus</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Elseya albagula</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Elseya dentata</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Elseya irwini</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Elseya lavarackorum</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Elseya novaeguineae</td>
+<td align="left">LR/lc</td>
+</tr>
+<tr class="even">
+<td align="left">Emydura macquarii</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Emydura subglobosa</td>
+<td align="left">LR/lc</td>
+</tr>
+<tr class="even">
+<td align="left">Emydura tanybaraga</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Flaviemys purvisi</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Hydromedusa maximiliani</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Hydromedusa tectifera</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Mesoclemmys dahli</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Mesoclemmys gibba</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Mesoclemmys nasuta</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Mesoclemmys tuberculata</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Mesoclemmys vanderhaegei</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="odd">
+<td align="left">Mesoclemmys zuliae</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Myuchelys bellii</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Myuchelys georgesi</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Myuchelys latisternum</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Phrynops geoffroanus</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Phrynops hilarii</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Phrynops tuberosus</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Phrynops williamsi</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Platemys platycephala</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Pseudemydura umbrina</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Rheodytes leukops</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Rhinemys rufipes</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="odd">
+<td align="left">Caretta caretta</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Chelonia mydas</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Eretmochelys imbricata</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Lepidochelys kempii</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Lepidochelys olivacea</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Natator depressus</td>
+<td align="left">DD</td>
+</tr>
+<tr class="odd">
+<td align="left">Chelydra acutirostris</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Chelydra rossignonii</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Chelydra serpentina</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Macrochelys temminckii</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Dermatemys mawii</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Dermochelys coriacea</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Actinemys marmorata</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Chrysemys dorsalis</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Chrysemys picta</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Clemmys guttata</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Deirochelys reticularia</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Emydoidea blandingii</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Emys orbicularis</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="even">
+<td align="left">Glyptemys insculpta</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Glyptemys muhlenbergii</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Graptemys barbouri</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Graptemys caglei</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Graptemys ernsti</td>
+<td align="left">NT</td>
+</tr>
+<tr class="odd">
+<td align="left">Graptemys flavimaculata</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Graptemys geographica</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Graptemys gibbonsi</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Graptemys nigrinoda</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Graptemys oculifera</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Graptemys ouachitensis</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Graptemys pearlensis</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Graptemys pseudogeographica</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Graptemys pulchra</td>
+<td align="left">NT</td>
+</tr>
+<tr class="even">
+<td align="left">Graptemys versa</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Malaclemys terrapin</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="even">
+<td align="left">Pseudemys alabamensis</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Pseudemys concinna</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Pseudemys gorzugi</td>
+<td align="left">NT</td>
+</tr>
+<tr class="odd">
+<td align="left">Pseudemys nelsoni</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Pseudemys peninsularis</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Pseudemys rubriventris</td>
+<td align="left">NT</td>
+</tr>
+<tr class="even">
+<td align="left">Pseudemys texana</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Terrapene carolina</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Terrapene coahuila</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Terrapene mexicana</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Terrapene nelsoni</td>
+<td align="left">DD</td>
+</tr>
+<tr class="odd">
+<td align="left">Terrapene ornata</td>
+<td align="left">NT</td>
+</tr>
+<tr class="even">
+<td align="left">Trachemys callirostris</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Trachemys decorata</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Trachemys decussata</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Trachemys dorbigni</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Trachemys emolli</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Trachemys gaigeae</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Trachemys grayi</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Trachemys nebulosa</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Trachemys ornata</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Trachemys scripta</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Trachemys stejnegeri</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="odd">
+<td align="left">Trachemys taylori</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Trachemys terrapen</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Trachemys venusta</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Trachemys yaquia</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Batagur baska</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Batagur borneoensis</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Batagur dhongoka</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Batagur kachuga</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Batagur trivittata</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Cuora amboinensis</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Cuora aurocapitata</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Cuora bourreti</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Cuora evelynae</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Cuora flavomarginata</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Cuora galbinifrons</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Cuora mccordi</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Cuora mouhotii</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Cuora picturata</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Cuora trifasciata</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Cuora yunnanensis</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Cuora zhoui</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Cyclemys dentata</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="odd">
+<td align="left">Cyclemys tcheponensis</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Geoclemys hamiltonii</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Geoemyda japonica</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Geoemyda spengleri</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Hardella thurjii</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Heosemys annandalii</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Heosemys grandis</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Heosemys spinosa</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Leucocephalon yuwonoi</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Malayemys subtrijuga</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Mauremys annamensis</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Mauremys caspica</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Mauremys japonica</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="even">
+<td align="left">Mauremys leprosa</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Mauremys mutica</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Mauremys nigricans</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Mauremys reevesii</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Mauremys rivulata</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Mauremys sinensis</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Melanochelys tricarinata</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Melanochelys trijuga</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="even">
+<td align="left">Notochelys platynota</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Orlitia borneensis</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Pangshura smithii</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="odd">
+<td align="left">Pangshura sylhetensis</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Pangshura tecta</td>
+<td align="left">LR/lc</td>
+</tr>
+<tr class="odd">
+<td align="left">Pangshura tentoria</td>
+<td align="left">LR/lc</td>
+</tr>
+<tr class="even">
+<td align="left">Rhinoclemmys annulata</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="odd">
+<td align="left">Rhinoclemmys areolata</td>
+<td align="left">NT</td>
+</tr>
+<tr class="even">
+<td align="left">Rhinoclemmys diademata</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Rhinoclemmys funerea</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="even">
+<td align="left">Rhinoclemmys melanosterna</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Rhinoclemmys nasuta</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="even">
+<td align="left">Rhinoclemmys pulcherrima</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Rhinoclemmys punctularia</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Rhinoclemmys rubida</td>
+<td align="left">NT</td>
+</tr>
+<tr class="odd">
+<td align="left">Sacalia bealei</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Sacalia quadriocellata</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Siebenrockiella crassicollis</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Vijayachelys silvatica</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Claudius angustatus</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="even">
+<td align="left">Cryptochelys acuta</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Cryptochelys angustipons</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Cryptochelys creaseri</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Cryptochelys dunni</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Cryptochelys herrerai</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Cryptochelys leucostomum</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Kinosternon alamosae</td>
+<td align="left">DD</td>
+</tr>
+<tr class="odd">
+<td align="left">Kinosternon arizonense</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Kinosternon baurii</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Kinosternon chimalhuaca</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Kinosternon durangoense</td>
+<td align="left">DD</td>
+</tr>
+<tr class="odd">
+<td align="left">Kinosternon flavescens</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Kinosternon hirtipes</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Kinosternon integrum</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Kinosternon scorpioides</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Kinosternon sonoriense</td>
+<td align="left">NT</td>
+</tr>
+<tr class="even">
+<td align="left">Kinosternon subrubrum</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Staurotypus salvinii</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="even">
+<td align="left">Staurotypus triporcatus</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="odd">
+<td align="left">Sternotherus carinatus</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Sternotherus depressus</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Sternotherus minor</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Sternotherus odoratus</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Pelomedusa subrufa</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Pelusios adansonii</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Pelusios bechuanicus</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Pelusios castaneus</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Pelusios castanoides</td>
+<td align="left">LR/lc</td>
+</tr>
+<tr class="even">
+<td align="left">Pelusios chapini</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Pelusios nanus</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Pelusios niger</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Pelusios rhodesianus</td>
+<td align="left">LR/lc</td>
+</tr>
+<tr class="even">
+<td align="left">Pelusios sinuatus</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Pelusios subniger</td>
+<td align="left">LR/lc</td>
+</tr>
+<tr class="even">
+<td align="left">Pelusios upembae</td>
+<td align="left">DD</td>
+</tr>
+<tr class="odd">
+<td align="left">Pelusios williamsi</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Platysternon megacephalum</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Erymnochelys madagascariensis</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Peltocephalus dumerilianus</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Podocnemis erythrocephala</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Podocnemis expansa</td>
+<td align="left">LR/cd</td>
+</tr>
+<tr class="odd">
+<td align="left">Podocnemis lewyana</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Podocnemis sextuberculata</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Podocnemis unifilis</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Podocnemis vogli</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Aldabrachelys gigantea</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Astrochelys radiata</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Astrochelys yniphora</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Chelonoidis abingdonii</td>
+<td align="left">EX</td>
+</tr>
+<tr class="odd">
+<td align="left">Chelonoidis becki</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Chelonoidis carbonarius</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Chelonoidis chathamensis</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Chelonoidis chilensis</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Chelonoidis darwini</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Chelonoidis denticulatus</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Chelonoidis duncanensis</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Chelonoidis hoodensis</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Chelonoidis niger</td>
+<td align="left">EX</td>
+</tr>
+<tr class="even">
+<td align="left">Chelonoidis porteri</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Chelonoidis vicina</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Chersina angulata</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Geochelone elegans</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Geochelone platynota</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Geochelone sulcata</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Gopherus agassizii</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Gopherus berlandieri</td>
+<td align="left">LR/lc</td>
+</tr>
+<tr class="even">
+<td align="left">Gopherus flavomarginatus</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Gopherus polyphemus</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Homopus areolatus</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Homopus boulengeri</td>
+<td align="left">NT</td>
+</tr>
+<tr class="even">
+<td align="left">Homopus femoralis</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Homopus signatus</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Indotestudo elongata</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Indotestudo forstenii</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Indotestudo travancorica</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Kinixys belliana</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Kinixys erosa</td>
+<td align="left">DD</td>
+</tr>
+<tr class="odd">
+<td align="left">Kinixys homeana</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Kinixys lobatsiana</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Kinixys natalensis</td>
+<td align="left">LR/nt</td>
+</tr>
+<tr class="even">
+<td align="left">Kinixys nogueyi</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Kinixys spekii</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Kinixys zombensis</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Malacochersus tornieri</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Manouria emys</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Manouria impressa</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Psammobates geometricus</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Psammobates oculiferus</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Psammobates tentorius</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Pyxis arachnoides</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Pyxis planicauda</td>
+<td align="left">CR</td>
+</tr>
+<tr class="odd">
+<td align="left">Stigmochelys pardalis</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Testudo graeca</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Testudo hermanni</td>
+<td align="left">NT</td>
+</tr>
+<tr class="even">
+<td align="left">Testudo horsfieldii</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Testudo kleinmanni</td>
+<td align="left">CR</td>
+</tr>
+<tr class="even">
+<td align="left">Testudo marginata</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Amyda cartilaginea</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Apalone ferox</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Apalone mutica</td>
+<td align="left">LC</td>
+</tr>
+<tr class="even">
+<td align="left">Apalone spinifera</td>
+<td align="left">LC</td>
+</tr>
+<tr class="odd">
+<td align="left">Chitra indica</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Cyclanorbis senegalensis</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Cycloderma frenatum</td>
+<td align="left">EN</td>
+</tr>
+<tr class="even">
+<td align="left">Lissemys punctata</td>
+<td align="left">LR/lc</td>
+</tr>
+<tr class="odd">
+<td align="left">Lissemys scutata</td>
+<td align="left">DD</td>
+</tr>
+<tr class="even">
+<td align="left">Nilssonia gangetica</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Nilssonia nigricans</td>
+<td align="left">EW</td>
+</tr>
+<tr class="even">
+<td align="left">Palea steindachneri</td>
+<td align="left">EN</td>
+</tr>
+<tr class="odd">
+<td align="left">Pelochelys bibroni</td>
+<td align="left">VU</td>
+</tr>
+<tr class="even">
+<td align="left">Pelodiscus sinensis</td>
+<td align="left">VU</td>
+</tr>
+<tr class="odd">
+<td align="left">Trionyx triunguis</td>
+<td align="left">VU</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="gbif-occurrence-data" class="section level3">
+<h3>GBIF Occurrence Data</h3>
+<p>I also used the gbif spatial <a href="https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R">data</a> to find occurrence data for turtles. This is how I downloaded the data. These are the packages I used to do it. And here it is.. Dedicate a paragraph to each one. IUCN … [2.data_download_and_processing.R]</p>
+</div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>IUCN 2017. IUCN Red List of Threatened Species. Version 2017-3 &lt;www.iucnredlist.org&gt;</p>
+<p>Spotila JR, Reina RD, Steyermark AC, Plotkin PT, Paladino FV. Pacific leatherback turtles face extinction. Nature. 2000 Jun;405(6786):529.</p>
 </div>
 </div>
 

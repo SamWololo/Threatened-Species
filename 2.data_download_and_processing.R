@@ -2,29 +2,30 @@
 # Sam Wolf
 # Data Download and Processing
 
-# Data ------------------------------------------------------------------------------------------------
+# Life-history data -----------------------------------------------------------------------------------
 ## Downloading amniote data
 download.file("http://www.esapubs.org/archive/ecol/E096/269/Data_Files/Amniote_Database_Aug_2015.csv", 
               "./Data/Amniote_Database_Aug_2015.csv")
-
-## To download The IUCN Red List of Threatened Species for REPTILES
-# The data file did not have a server URL file nor was in .csv format for use of the download.file command. 
-# To download the spatial data for reptiles, I visited http://www.iucnredlist.org/technical-documents/spatial-data.
-# The main dataset for reptiles was downloaded into the downloads folder of the PC and moved to the data
-# folder of this Rproject, where it was unzipped. 
 
 # Read data
 Amniote<-read.csv("./Data/Amniote_Database_Aug_2015.csv")
 Amniote[Amniote==-999]<-NA
 
-# Data carpentry -------------------------------------------------------------------------------------- 
-# Here I filter out the amniote database to only include turtle data. 
+# Data carpentry
+## Here I filter out the amniote database to only include turtle data. 
 Testudines<-
   Amniote %>% 
   filter(class == "Reptilia" & order =="Testudines")
 
-# Extracting IUCN Status for each species
-## With my IUCN API key
+# IUCN Spatial data -----------------------------------------------------------------------------------
+## To download The IUCN Red List of Threatened Species for reptiles
+# The data file did not have a server URL file nor was in .csv format for use of the download.file command. 
+# To download the spatial data for reptiles, I visited http://www.iucnredlist.org/technical-documents/spatial-data.
+# The main dataset for reptiles was downloaded into the downloads folder of the PC and moved to the data
+# folder of this Rproject, where it was unzipped. The data was then unpacked using the taxize package, which 
+# required an IUCN Red List API. The application is at http://apiv3.iucnredlist.org/api/v3/token. 
+
+## Extracting IUCN Status for each species
 Sys.setenv(IUCN_REDLIST_KEY="79326e37e61929e5349ff01eaef7da1a0a8a9003583714d5282227332875d576")
 
 Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
@@ -32,7 +33,7 @@ Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
 # ia is a list of summaries. This is NOT an object, so you can't turn it into a .csv
 ia <- iucn_summary(Testudines$Binomial) ## WARNING: This script loads all the taxa for Testudines ~10 mins
 #This unpacks ia so that we're just looking at the status
-Turtle_status<-iucn_status(ia) # "species_iucn" is the name of the dataframe full of turtle statuses
+Turtle_status<-iucn_status(ia) # "Turtle_status" is the name of the dataframe full of turtle statuses
 
 write.csv(Turtle_status, file="./Data/Turtle_status.csv")
 
