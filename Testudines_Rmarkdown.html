@@ -194,7 +194,7 @@ Amniote&lt;-<span class="kw">read.csv</span>(<span class="st">&quot;./Data/Amnio
 
 <span class="co"># Since there are many null values in the original data, represented as -999, these should be turned into NA's to make the it more readable. </span>
 Amniote[Amniote<span class="op">==-</span><span class="dv">999</span>]&lt;-<span class="ot">NA</span></code></pre></div>
-<p>Because most of the dataframe included taxa that were beyond the scope of the question, I refined it to filter information that did not contain information regarding turtle life-history.</p>
+<p>Because most of the dataframe included taxa that were beyond the scope of the question, I refined it to filter information that did not contain information regarding turtle life-history. The new turtle-only dataframe contained 273 objects with 37 variables. From this information we know that we are working with 273 species.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Filter amniote data to only include testudines</span>
 Testudines&lt;-
 <span class="st">  </span>Amniote <span class="op">%&gt;%</span><span class="st"> </span>
@@ -202,14 +202,15 @@ Testudines&lt;-
 </div>
 <div id="iucn-spatial-data" class="section level3">
 <h3>IUCN Spatial Data</h3>
-<p>I also used the IUCN Red List Spatial Data to access a large dataframe with a comprehensive assessment of threats to various taxonomic groups. The data did not have a server URL file nor was in .csv format for use of the download.file command. To download the spatial data for reptiles, I visited <a href="http://www.iucnredlist.org/technical-documents/spatial-data">this</a> website. The main dataset for reptiles was downloaded into the downloads folder of my personal computer, where it was then moved and unzipped in my Spatial Data folder. For reproducibility, I then wrote it into a .csv and deposited it into my <a href="https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R">repository</a> on GitHub. The data was then unpacked using the taxize package, which required an IUCN Red List API. The application is at <a href="http://apiv3.iucnredlist.org/api/v3/token" class="uri">http://apiv3.iucnredlist.org/api/v3/token</a>.</p>
+<p>I also used the IUCN Red List Spatial Data to access a large dataframe with a comprehensive assessment of threats to various taxonomic groups. The data did not have a server URL file nor was in .csv format for use of the download.file command. To download the spatial data for reptiles, I visited <a href="http://www.iucnredlist.org/technical-documents/spatial-data">this</a> website. The main dataset for reptiles was downloaded into the downloads folder of my personal computer, where it was then moved and unzipped in my Spatial Data folder. For reproducibility, I then wrote it into a .csv and deposited it into my <a href="https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R">repository</a> on GitHub. The data was then unpacked using the taxize package, which required an IUCN Red List API. The application is at <a href="http://apiv3.iucnredlist.org/api/v3/token" class="uri">http://apiv3.iucnredlist.org/api/v3/token</a>. Once I did, with the help of the rredlist package, the dataframe contained 273 objects with 2 variables.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Including spatial information into the data frame</span>
 Turtle_status&lt;-<span class="kw">read.csv</span>(<span class="st">&quot;./Data/Turtle_status.csv&quot;</span>)
 
 <span class="kw">colnames</span>(Turtle_status) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Binomial&quot;</span>,<span class="st">&quot;iucn&quot;</span>)
 
 Testudines<span class="op">$</span>iucn&lt;-Turtle_status</code></pre></div>
-<p>The dataframe contained records prior to the 2001 system, the one that is relevant to this study, which required some renaming of old categories.</p>
+<p>The dataframe contained IUCN categories that existed prior to the 2001 system, the one that is relevant for this study. Because these datapoints remained, it required the renaming of old categories.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(Turtle_status<span class="op">$</span>iucn)</code></pre></div>
 <pre><code>## 
 ##    CR    DD    EN    EW    EX    LC LR/cd LR/lc LR/nt    NT    VU 
 ##    33     7    37     1     2    32     1    10    19    10    52</code></pre>
@@ -225,7 +226,16 @@ Turtle_status<span class="op">$</span>iucn[<span class="kw">which</span>(Turtle_
 </div>
 <div id="gbif-occurrence-data" class="section level3">
 <h3>GBIF Occurrence Data</h3>
-<p>I also used the gbif spatial <a href="https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R">data</a> to find occurrence data for turtles. This is how I downloaded the data. These are the packages I used to do it. And here it is.. Dedicate a paragraph to each one. IUCN … [2.data_download_and_processing.R]</p>
+<p>I also used the GBIF occurrence data to be able to graphically analyze the geographic patterns of turtles. Due to the size of this <a href="https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R">dataframe</a>, I stored it in my repository. The dataframe contained 82837 occurrences with 184 variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gbif_records&lt;-<span class="kw">read.csv</span>(<span class="st">&quot;Data/gbif_records2.csv&quot;</span>)</code></pre></div>
+<p>I then cleaned many of the vectors, being that much in the dataframe was beyond the scope of this project.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gbif_records&lt;-
+<span class="st">  </span>gbif_records <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(lon)<span class="op">&amp;!</span><span class="kw">is.na</span>(lat))<span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(lon, lat, species, country) </code></pre></div>
+<p>This yielded a dataframe still with 82837 occurrences but with only 4 variables:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(gbif_records)</code></pre></div>
+<pre><code>## [1] &quot;lon&quot;     &quot;lat&quot;     &quot;species&quot; &quot;country&quot;</code></pre>
 </div>
 </div>
 <div id="references" class="section level2">

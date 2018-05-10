@@ -129,5 +129,8 @@ I have begun my project write-up in html Rmarkdown format. So far I have begun w
 I am struggling to make a table of IUCN statuses, which I once had. I am now getting a table of 273 rows, but I only want something that describes how many species I have for each status. I need to ask about this tomorrow. 
 
 Questions For Susy: 
-How to make table (I managed but the old vectors remain - why?)
-Is how I reference my dataframes ok? Good for reproducibility and legibility?
+1. How to make table (I managed but the old vectors remain - why?)
+2. Is how I reference my dataframes ok? Good for reproducibility and legibility?
+3. Continuation of the above question: gbif_records when loaded is huge, and slows the knitting by a lot. I need to run it to show that the cleaning works. 
+4. Is it OK to do output only?
+5. Is it OK to say "4 vectors"? Or do I have to name each vector? Name each species?

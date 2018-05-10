@@ -33,6 +33,7 @@ library(dplyr)
 ```
 
 # Correlation between life-history traits of Testudines and extinction risk
+# Introduction
 ###  Can the IUCN status of turtles be predicted from their life-history traits? This study also seeks draw the relationship between IUCN status in the order Testudinesa to their geographic range. 
 First two lines should be pretty broad background. Why it matters, etc. Get about 3 paragraphs down. 
 Life-history and extinction rates correlates of turtles
@@ -40,7 +41,7 @@ Life-history and extinction rates correlates of turtles
 Dwindling numbers of terrestrial, riverine and marine turtles signal a threat to biodiversity in global ecosystems. In Asia, traditional medicines and growing meat markets have caused high extinction risks. Of the world's top 25 endangered tortoises and freshwater turtles, 18 are native to Southeast Asia. (Rhodin et al. 2011) In marine turtles, accounts of decline are largely based on lack of data and have. (Spotila et al. 2000) The high prevalence of threatened turtle species and disparity in data calls for a model that can identiy species at risk of extinction. 
 
 
-## Brief description of the methods
+# Methods
 ### Amniote Life-History Data
 I collected turtle life-history data by downloading the Amniote_Database_Aug_2015.csv life-history [database](http://www.esapubs.org/archive/ecol/E096/269/#data). The amniote dataframe by Myhrvold et al.(2015) included 21322 objects with 36 variables.  I analyzed these data with RStudio using the tidyverse package. 
 
@@ -52,7 +53,7 @@ Amniote<-read.csv("./Data/Amniote_Database_Aug_2015.csv")
 Amniote[Amniote==-999]<-NA
 ```
 
-Because most of the dataframe included taxa that were beyond the scope of the question, I refined it to filter information that did not contain information regarding turtle life-history. 
+Because most of the dataframe included taxa that were beyond the scope of the question, I refined it to filter information that did not contain information regarding turtle life-history. The new turtle-only dataframe contained 273 objects with 37 variables. From this information we know that we are working with 273 species. 
 
 ```{r}
 # Filter amniote data to only include testudines
@@ -62,7 +63,7 @@ Testudines<-
 ```
 
 ### IUCN Spatial Data
-I also used the IUCN Red List Spatial Data  to access a large dataframe with a comprehensive assessment of threats to various taxonomic groups. The data  did not have a server URL file nor was in .csv format for use of the download.file command. To download the spatial data for reptiles, I visited [this](http://www.iucnredlist.org/technical-documents/spatial-data) website. The main dataset for reptiles was downloaded into the downloads folder of my personal computer, where it was then moved and unzipped in my Spatial Data folder.  For reproducibility, I then wrote it into a .csv and deposited it into my [repository](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R) on GitHub. The data was then unpacked using the taxize package, which required an IUCN Red List API. The application is at http://apiv3.iucnredlist.org/api/v3/token. 
+I also used the IUCN Red List Spatial Data  to access a large dataframe with a comprehensive assessment of threats to various taxonomic groups. The data  did not have a server URL file nor was in .csv format for use of the download.file command. To download the spatial data for reptiles, I visited [this](http://www.iucnredlist.org/technical-documents/spatial-data) website. The main dataset for reptiles was downloaded into the downloads folder of my personal computer, where it was then moved and unzipped in my Spatial Data folder.  For reproducibility, I then wrote it into a .csv and deposited it into my [repository](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R) on GitHub. The data was then unpacked using the taxize package, which required an IUCN Red List API. The application is at http://apiv3.iucnredlist.org/api/v3/token. Once I did, with the help of the rredlist package, the dataframe contained 273 objects with 2 variables. 
 
 ```{r}
 # Including spatial information into the data frame
@@ -73,9 +74,9 @@ colnames(Turtle_status) <- c("Binomial","iucn")
 Testudines$iucn<-Turtle_status
 ```
 
-The dataframe contained IUCN categories that existed prior to the 2001 system, the one that is relevant for this study. Because these datapoints remained, it required the renaming of old categories. 
+The dataframe contained IUCN categories that existed prior to the 2001 system, the one that is relevant for this study. Because these categories remained, it required the renaming of old categories. 
 
-```{r echo=FALSE}
+```{r echo=TRUE}
 table(Turtle_status$iucn)
 ```
 Categories "Near Threatened" and "Least Concern" became their own categories while "Conservation Dependent" was merged into "Near Threatened". 
@@ -89,14 +90,49 @@ table(Turtle_status$iucn)
 ```
 
 ### GBIF Occurrence Data
-I also used the gbif spatial [data](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R) to find occurrence data for turtles. 
-This is how I downloaded the data. These are the packages I used to do it. And here it is.. Dedicate a paragraph to each one. 
-IUCN ... [2.data_download_and_processing.R]
+I also used the GBIF occurrence data to be able to graphically analyze the geographic patterns of turtles. Due to the size of this [dataframe](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R), I stored it in my repository. The dataframe contained 82837 occurrences with 184 variables. 
+
+```{r}
+gbif_records<-read.csv("Data/gbif_records2.csv")
+
+```
+I then cleaned many of the vectors, being that much in the dataframe was beyond the scope of this project. 
+```{r}
+gbif_records<-
+  gbif_records %>% 
+  dplyr::filter(!is.na(lon)&!is.na(lat))%>%
+  dplyr::select(lon, lat, species, country) 
+```
+This yielded a dataframe still with 82837 occurrences but with only 4 variables: 
+```{r echo=FALSE}
+names(gbif_records)
+
+```
+```{r}
+## Get rid of duplicate occurrences
+dups=duplicated(gbif_records[, c("lon", "lat", "country")])
+gbif_records <-gbif_records[!dups, ]
+```
+### Merging
+At this stage the data has been cleaned for the purposes of this project. The next step is comining the data into one dataframe for it to be usable during analysis. 
+
+```{r}
+# To merge the turtle amniote data and iucn data 
+Turtle_Lifehistory_df<-merge(Testudines, Turtle_status, by="Binomial")
+
+# To merge the previous merger with gbif records 
+All_Dataframes_df<-merge(Turtle_Lifehistory_df, gbif_records, by.x="Binomial", by.y="species")
+
+# To write a .csv file so the data is easily accessible in the future
+write.csv(All_Dataframes_df, file="./Data/Processed/Clean_Turtle_Lifehistory_Data.csv")
+
+```
 
 
+# Results and Discussion
 
 
-## References
+# References
 IUCN 2017. IUCN Red List of Threatened Species. Version 2017-3 <www.iucnredlist.org>
 
 Spotila JR, Reina RD, Steyermark AC, Plotkin PT, Paladino FV. Pacific leatherback turtles face extinction. Nature. 2000 Jun;405(6786):529.
