@@ -138,3 +138,7 @@ Questions For Susy:
 
 5/11/18
 I will be running the code and Rmarkdown on a new computer. I want to verify whether it is completely reproducible. I also noticed that the original Turtle_status (pre-merge) file has lost the outdated IUCN files. I don't know why this is, hopefully I can fix it. 
+
+NOTE WHEN EVALUATING: THe Rmarkdown is heavy. It only takes a couple of minutes to load, and another 30 seconds to process when it's put out. If you click too rapidly/eagerly, it will stop responding. Afterwards it works great!!
+
+I am unable to turn the Rmarkdown into a PDF because the leaflet graph is in latex which is incompatible with the format. 

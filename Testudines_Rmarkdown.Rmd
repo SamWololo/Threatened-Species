@@ -43,23 +43,22 @@ Dwindling numbers of terrestrial, riverine and marine turtles signal a threat to
 [Github repository link](https://github.com/SamWololo/Threatened-Species)
 
 ### Amniote Life-History Data
-I collected turtle life-history data by downloading the Amniote_Database_Aug_2015.csv life-history [database](http://www.esapubs.org/archive/ecol/E096/269/#data). The amniote dataframe by Myhrvold et al.(2015) included 21,322 objects with 36 variables.  I analyzed these data with RStudio using the tidyverse package. 
+I collected turtle life-history data by downloading the Amniote_Database_Aug_2015.csv life-history [database](http://www.esapubs.org/archive/ecol/E096/269/#data). The amniote dataframe by Myhrvold et al.(2015) included 21,322 objects with 36 variables.  Since there were many null values in the original data, represented as -999, I turned them into NA's. I analyzed these data using the tidyverse package. Because most of the dataframe included taxa that were beyond the scope of the question, I refined it further, and filtered information that did not contain information regarding turtle life-history. The new turtle-only dataframe contained 273 observations with 37 variables. From this information we know that we are working with 273 species. 
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 ## Read amniote data
 Amniote<-read.csv("./Data/Base/Amniote_Database_Aug_2015.csv")
 
 ## Since there are many null values in the original data, represented as -999, these should be turned into NA's to make the it more readable. 
 Amniote[Amniote==-999]<-NA
-```
 
-Because most of the dataframe included taxa that were beyond the scope of the question, I refined it to filter information that did not contain information regarding turtle life-history. The new turtle-only dataframe contained 273 observations with 37 variables. From this information we know that we are working with 273 species. 
-
-```{r message=FALSE, warning=FALSE}
 ## Filter amniote data to only include testudines
 Testudines<-
   Amniote %>% 
   filter(class == "Reptilia" & order =="Testudines")
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 ## Data summary using the kableExtra package
 kable(cbind(Testudines), "html") %>%
@@ -70,10 +69,12 @@ kable(cbind(Testudines), "html") %>%
 ### IUCN Spatial Data
 I also used the IUCN Red List Spatial Data  to access a large data frame with a comprehensive assessment of threats to various taxonomic groups. The data  did not have a server URL file nor was in .csv format for use of the download.file command. To download the spatial data for reptiles, I visited [this](http://www.iucnredlist.org/technical-documents/spatial-data) website. The main dataset for reptiles was downloaded into the downloads folder of my personal computer, where it was then moved and unzipped in my Spatial Data folder which was put on the gitignite list due to sheer size.  For reproducibility, I then wrote it into a .csv and deposited it into my [repository](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R) on GitHub. The data was then unpacked using the taxize package, which required an IUCN Red List API. The application is at http://apiv3.iucnredlist.org/api/v3/token. Once I did, with the help of the rredlist package, the data frame contained 273 observations, representing the same number of unique species. It also had 2 variables: the binomial and the iucn category. Being that I used pipes for this step, I also loaded tidyverse, which includes dplyr. 
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 ## Including spatial information into the data frame
 Turtle_status<-read.csv("./Data/Base/Turtle_status.csv")
+```
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 ## Data summary
 kable(cbind(Turtle_status), "html") %>%
   kable_styling() %>%
@@ -82,12 +83,12 @@ kable(cbind(Turtle_status), "html") %>%
 
 The data frame contained IUCN categories that existed prior to the 2001 system, the one that is relevant for this study. Because these categories remained, it required the renaming of old categories. 
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 table(Turtle_status$iucn)
 
 ```
 Categories "Near Threatened" and "Least Concern" became their own categories while "Conservation Dependent" was merged into "Near Threatened". 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 ## To rename outdated categories 
 Turtle_status$iucn[which(Turtle_status$iucn=="LR/cd")]<-"NT"
 Turtle_status$iucn[which(Turtle_status$iucn=="LR/nt")]<-"NT"
@@ -97,46 +98,39 @@ table(Turtle_status$iucn)
 ```
 
 ### GBIF Occurrence Data
-I also used the GBIF occurrence data to be able to graphically analyze the geographic patterns of turtles. Due to the size of this [dataframe](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R), I added it to my gitignore. The dataframe contained 348,778 observations with 184 variables for 273 species of turtles. I used pipes here as well, and needed the tidyverse package to do so. 
+I also used the GBIF occurrence data to be able to graphically analyze the geographic patterns of turtles. Due to the size of this [dataframe](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R), I added it to my gitignore. The dataframe contained 348,778 observations with 184 variables for 273 species of turtles. I used pipes here as well, and needed the tidyverse package to do so. I then filtered many of the variables, being that many in the data frame were beyond the scope of this project. This yielded a data frame still with 204,747 occurrences but with only 4 variables. These variables are lon, lat, species, country. After this, I removed the duplicate occurences in the data frame, yielding 82,837 observations for 4 variables for 273 species of turtles. 
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-#gbif_records<-read.csv("Data/Base/gbif_records2.csv")
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+gbif_records<-read.csv("Data/Base/gbif_records2.csv")
 
-```
-I then cleaned many of the variables, being that many in the data frame were beyond the scope of this project. 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-#gbif_records<-
-  #gbif_records %>% 
-  #dplyr::filter(!is.na(lon)&!is.na(lat))%>%
-  #dplyr::select(lon, lat, species, country) 
-```
-This yielded a data frame still with 204,747 occurrences but with only 4 variables. These variables are lon, lat, species, country. 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-#names(gbif_records)
+gbif_records<-
+  gbif_records %>% 
+  dplyr::filter(!is.na(lon)&!is.na(lat))%>%
+  dplyr::select(lon, lat, species, country)
 
-```
-After this, I removed the duplicate occurences in the data frame, yielding 82,837 observations for 4 variables for 273 species of turtles. 
-```{r message=FALSE, warning=FALSE}
+names(gbif_records)
+
 ## Get rid of duplicate occurrences
-#dups=duplicated(gbif_records[, c("lon", "lat", "country")])
-#gbif_records <-gbif_records[!dups, ]
+dups=duplicated(gbif_records[, c("lon", "lat", "country")])
+gbif_records <-gbif_records[!dups, ]
 ```
 
 ### Merging
-At this stage the data has been cleaned for the purposes of this project. The next step is combining the data into one data frame for it to be usable during analysis. I then wrote this file into a .csv. 
+At this stage the data has been cleaned for the purposes of this project. The next step was combining the three data frames into one for it to be usable during analysis. First, I had to create a shared column between dataframes so that they could be merged on that shared name. I then merged the life-history "Testudines" and turtle IUCN data "Turtle_status". Next I merged the life-history and IUCN category list with the GBIF data frame.  I then wrote this file into a .csv for reproducibility. It is called "Clean_Turtle_Lifehistory_Data.csv" in the data files of the repository but I name it "All_Dataframes_df" in my Rscripts.  
 
-```{r message=FALSE, warning=FALSE}
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 ## Create a "binomial" column because data frames must be merged on a name they both have. 
-#Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
+Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
 
 ## To merge the turtle amniote data and iucn data 
-#Turtle_Lifehistory_df<-merge(Testudines, Turtle_status, by.x="Binomial")
+Turtle_Lifehistory_df<-merge(Testudines, Turtle_status, by.x="Binomial")
 
 ## To merge the previous merger with gbif records 
-#All_Dataframes_df<-merge(Turtle_Lifehistory_df, gbif_records, by.x="Binomial", by.y="species")
+All_Dataframes_df<-merge(Turtle_Lifehistory_df, gbif_records, by.x="Binomial", by.y="species")
 
+## Write .csv
+write.csv(All_Dataframes_df, file="./Data/Processed/Clean_Turtle_Lifehistory_Data.csv")
 ```
-
 
 # Results and Discussion
 ### Data description
