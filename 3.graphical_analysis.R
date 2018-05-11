@@ -2,22 +2,15 @@
 # Sam Wolf
 # Data Exploration
 
-
 All_Dataframes_df<-read.csv("./Data/Processed/Clean_Turtle_Lifehistory_Data.csv")
 
 # Data exploration ------------------------------------------------------------------------------------
 ## Combining group_by() and summarize() in a pipe to find interesting data about the dataframe. 
 ### Exploring mean body mass
-dt<-All_Dataframes_df %>% 
+All_Dataframes_df %>% 
   group_by(iucn) %>% 
   dplyr::summarise(N_sp=n_distinct(Binomial),  # add dplyr because summarise belongs to two packages
                    Weight_avg=mean(adult_body_mass_g, na.rm=TRUE))
-
-# Graphing log bodymass by IUCN status 
-pdf("./Figures/boxplot_IUCN_logmass.pdf")
-ggplot(data=All_Dataframes_df, aes(x=iucn,y=log(adult_body_mass_g)))+
-  geom_boxplot()
-dev.off()
 
 # Graphing average log bodymass by IUCN status
 pdf("./Figures/boxplot_IUCN_logweight.pdf")
@@ -32,17 +25,23 @@ All_Dataframes_df %>%
   xlab("IUCN Status")
 dev.off()
 
-# create 2 dataframes, one aminote and IUCN, then the alldata with gbif only when I want maps
+png("./Figures/boxplot_status_by_logclutchsize")
+ggplot(All_Dataframes_df, aes(x=iucn, y=litter_or_clutch_size_n, fill=iucn)) + 
+  geom_boxplot(alpha=0.3) +
+  theme(legend.position="none")+
+  ylab("Clutch Size (number of eggs)") +
+  xlab("IUCN Status")
+dev.off()
 
-All_Dataframes_df %>% 
-  filter(iucn=="CR" | iucn=="EX") %>% 
-  group_by(Binomial,iucn) %>%
-  dplyr::summarise(Weight_avg=mean(adult_body_mass_g, na.rm=TRUE),
-                   status_iucn=unique(iucn))
-  
+png("./Figures/boxplot_status_by_maximum_longevity_y")
+ggplot(All_Dataframes_df, aes(x=iucn, y=maximum_longevity_y, fill=iucn)) + 
+  geom_boxplot(alpha=0.3) +
+  theme(legend.position="none")+
+  ylab("Maximum Longevity (years)") +
+  xlab("IUCN Status")
+dev.off()
 
-# Data Distribution ---------------------
-
+# Data Distribution -----------------------------------------------------------------------------
 ###write down my variables. use worldsmpl for maps to plot occurrences. rasters for biomes is OK too
 data(wrld_simpl)
 
@@ -81,20 +80,15 @@ leaflet(All_Dataframes_df) %>%
   addLegend( pal=mypalette, values=~iucn, opacity=0.9, title = "IUCN Status", position = "bottomright" )
 
 # Results ------------------------------------------------------------------------------------------
-png("./Figures/boxplot_status_by_logclutchsize")
-ggplot(data=All_Dataframes_df, aes(x=iucn,y=log(litter_or_clutch_size_n)))+
-  geom_boxplot()
+# Scatterplots
+## Scatterplot for IUCN and clutch size relation
+pdf("./Figures/clutch_size_by_log_egg_mass.pdf")
+ggplot(All_Dataframes_df,aes(x=litter_or_clutch_size_n, y=log(egg_mass_g))) + 
+  geom_point(aes(colour=iucn, size=log(adult_body_mass_g)), alpha=0.8)+
+  ylab("Log Egg Mass (g)") +
+  xlab("Clutch size")
 dev.off()
 
-ggplot(All_Dataframes_df,aes(x=iucn, y=log(egg_mass_g))) + 
-  geom_boxplot()
-
-names(All_Dataframes_df)
-#Scatterplot for IUCN and clutch size relation
-ggplot(All_Dataframes_df,aes(x=litter_or_clutch_size_n, y=egg_mass_g)) + 
-  geom_point(aes(colour=iucn, size=adult_body_mass_g), alpha=0.8)
-
-#Scatter
 pdf("./Figures/bodymass_by_eggmass_clutchsize.pdf")
 ggplot(All_Dataframes_df,aes(x=log(adult_body_mass_g), y=log(egg_mass_g))) + 
   geom_point(aes(colour=iucn, size=litter_or_clutch_size_n), alpha=0.8) +
@@ -102,9 +96,9 @@ ggplot(All_Dataframes_df,aes(x=log(adult_body_mass_g), y=log(egg_mass_g))) +
   xlab("Log Adult Body Mass (g)")
 dev.off()
 
-pdf("./Figures/bodymass_by_eggmass_littersize.pdf")
-ggplot(All_Dataframes_df,aes(x=female_maturity_d, y=incubation_d)) + 
+pdf("./Figures/longevity_by_egg_mass.pdf")
+ggplot(All_Dataframes_df,aes(x=maximum_longevity_y, y=log(egg_mass_g))) + 
   geom_point(aes(colour=iucn, size=litter_or_clutch_size_n), alpha=0.8) +
   ylab("Log Egg Mass (g)") +
-  xlab("Log Adult Body Mass (g)")
+  xlab("Maximum Longevity (years)")
 dev.off()

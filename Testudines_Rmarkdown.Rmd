@@ -97,7 +97,7 @@ table(Turtle_status$iucn)
 ```
 
 ### GBIF Occurrence Data
-I also used the GBIF occurrence data to be able to graphically analyze the geographic patterns of turtles. Due to the size of this [dataframe](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R), I added it to my gitignore. The dataframe contained 348,778 observations with 184 variables for 273 species of turtles. I used pipes here as well, and thus loaded tidyverse. 
+I also used the GBIF occurrence data to be able to graphically analyze the geographic patterns of turtles. Due to the size of this [dataframe](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R), I added it to my gitignore. The dataframe contained 348,778 observations with 184 variables for 273 species of turtles. I used pipes here as well, and needed the tidyverse package to do so. 
 
 ```{r message=FALSE, warning=FALSE}
 gbif_records<-read.csv("Data/Base/gbif_records2.csv")
@@ -141,20 +141,22 @@ All_Dataframes_df<-merge(Turtle_Lifehistory_df, gbif_records, by.x="Binomial", b
 # Results and Discussion
 ### Data description
 ```{r}
-# Data description
+# Load data
 All_Dataframes_df<-read.csv("./Data/Processed/Clean_Turtle_Lifehistory_Data.csv")
 
-kable(cbind(dt), "html") %>%
+# Data description
+kable(cbind(head(All_Dataframes_df)), "html") %>%
   kable_styling() %>%
-  scroll_box(width = "500px", height = "400px")
+  scroll_box(width = "600px", height = "400px")
+
 ```
 
 ### Data distribution
 ```{r message=FALSE, warning=FALSE}
-# Get map
+# Get map with maptools package
 data(wrld_simpl)
 
-# Color vector
+# Color vector with RColorBrewer package
 cols<-brewer.pal(n=n_distinct(All_Dataframes_df$iucn),name="Set1")
 cols_status<-cols[All_Dataframes_df$iucn]
 
@@ -166,7 +168,7 @@ legend("top",fill=cols,legend = levels(All_Dataframes_df$iucn),horiz=TRUE)
 ```
 
 ```{r message=FALSE, warning=TRUE}
-# Creating a background map with leaflet
+# Creating a background map with leaflet package
 # Create a color palette by factor:
 mypalette = colorFactor( palette="YlOrBr", domain=All_Dataframes_df$iucn, na.color="transparent")
 
@@ -188,8 +190,9 @@ leaflet(All_Dataframes_df) %>%
 ```
 
 ### Data analysis
-In order to demonstrate the relationship between the body mass (g) life history trair to the IUCN category, we drew a box and whisker plot. 
+In order to demonstrate the relationship between the body mass (g) life history trait to the IUCN category, we drew a box and whisker plot. 
 ```{r message=FALSE, warning=FALSE}
+# Boxplot showing log mean weight against IUCN status. Used ggplot2 package.
 All_Dataframes_df %>% 
   group_by(Binomial) %>% 
   dplyr::summarise(Weight_avg=mean(adult_body_mass_g, na.rm=TRUE),
@@ -200,7 +203,7 @@ All_Dataframes_df %>%
   ylab("Log Body Mass (g)") +
   xlab("IUCN Status")
 ```
-
+We see somewhat of a relationship in this scatterplot. It appears that turtles that are of a larger body mass lay larger eggs. This may point towards a larger initial energy investment in offspring, moreso since larger turtles have larger clutch sizes.  Furthermore, we see some occurrence of more critical categories (CR, VU, EN) with larger turtles that invest much in their eggs. 
 ```{r message=FALSE, warning=FALSE}
 # Relationship between log adult body mass and log egg mass among turtles
 ggplot(All_Dataframes_df,aes(x=log(adult_body_mass_g), y=log(egg_mass_g))) + 
@@ -208,12 +211,38 @@ ggplot(All_Dataframes_df,aes(x=log(adult_body_mass_g), y=log(egg_mass_g))) +
   ylab("Log Egg Mass (g)") +
   xlab("Log Adult Body Mass (g)")
 ```
-
+Waples et al. (2016) highlighted the importance of adult turtle mortality and population sizes. I used this as inspiration to probe the potential of an even stronger relationship between a life-history trait and extinction rates. I used the maximum longevity variable.  
+```{r}
+ggplot(All_Dataframes_df, aes(x=iucn, y=maximum_longevity_y, fill=iucn)) + 
+  geom_boxplot(alpha=0.3) +
+  theme(legend.position="none")+
+  ylab("Maximum Longevity (years)") +
+  xlab("IUCN Status")
+```
+We see promising data in this scatterplot in that the longer-lived turtles appear to fall under more severe IUCN categories. Egg mass is also correlated to longer-lived turtles, and so is the clutch size. The six marine turtles in the world are some of the heaviest, and follow patterns similar to those displayed here. Furthermore, they often lay hundreds of eggs in a single clutch.  
+```{r}
+ggplot(All_Dataframes_df,aes(x=maximum_longevity_y, y=log(egg_mass_g))) + 
+  geom_point(aes(colour=iucn, size=litter_or_clutch_size_n), alpha=0.8) +
+  ylab("Log Egg Mass (g)") +
+  xlab("Maximum Longevity (years)")
+```
 
 
 # References
+Bonin, F., Devaux, B., & Dupré, A. (2006). Turtles of the World. JHU Press.
+
+Cooper, N., Bielby, J., Thomas, G. H., & Purvis, A. (2008). Macroecology and extinction risk correlates of frogs. Global Ecology and Biogeography, 17(2), 211-221.
+
+Frazer, N. B. (1992). Sea turtle conservation and halfway technology. Conservation Biology, 6(2), 179-184.
+
+GBIF.org (29th February 2016) GBIF Occurrence Download https://doi.org/10.15468/dl.ywhpmz
+
+Haitao, S., Parham, J. F., Lau, M., & Tien-Hsi, C. (2007). Farming endangered turtles to extinction in China. Conservation Biology, 21(1), 5-6.
+
 IUCN 2017. IUCN Red List of Threatened Species. Version 2017-3 <www.iucnredlist.org>
 
 Spotila, J. R., Reina, R. D., Steyermark, A. C., Plotkin, P. T., & Paladino, F. V. (2000). Pacific leatherback turtles face extinction. Nature, 405(6786), 529.
+
+van Dijk, P. P., Stuart, B. L., & Rhodin, A. G. (2000). Asian Turtle Trade: Proceedings of a Workshop on Conservation and Trade of Freshwater Turtles and Tortoises in Asia--Phnom Penh, Cambodia, 1-4 December 1999. Lunenburg, Mass.: Chelonian Research Foundation.
 
 Waples, R. S. (2016). Life-history traits and effective population size in species with overlapping generations revisited: the importance of adult mortality. Heredity, 117(4), 241.
