@@ -46,22 +46,22 @@ Dwindling numbers of terrestrial, riverine and marine turtles signal a threat to
 I collected turtle life-history data by downloading the Amniote_Database_Aug_2015.csv life-history [database](http://www.esapubs.org/archive/ecol/E096/269/#data). The amniote dataframe by Myhrvold et al.(2015) included 21,322 objects with 36 variables.  I analyzed these data with RStudio using the tidyverse package. 
 
 ```{r}
-# Read amniote data
+## Read amniote data
 Amniote<-read.csv("./Data/Base/Amniote_Database_Aug_2015.csv")
 
-# Since there are many null values in the original data, represented as -999, these should be turned into NA's to make the it more readable. 
+## Since there are many null values in the original data, represented as -999, these should be turned into NA's to make the it more readable. 
 Amniote[Amniote==-999]<-NA
 ```
 
 Because most of the dataframe included taxa that were beyond the scope of the question, I refined it to filter information that did not contain information regarding turtle life-history. The new turtle-only dataframe contained 273 observations with 37 variables. From this information we know that we are working with 273 species. 
 
 ```{r}
-# Filter amniote data to only include testudines
+## Filter amniote data to only include testudines
 Testudines<-
   Amniote %>% 
   filter(class == "Reptilia" & order =="Testudines")
 
-# Data summary using the kableExtra package
+## Data summary using the kableExtra package
 kable(cbind(Testudines), "html") %>%
   kable_styling() %>%
   scroll_box(width = "500px", height = "500px")
@@ -71,10 +71,10 @@ kable(cbind(Testudines), "html") %>%
 I also used the IUCN Red List Spatial Data  to access a large data frame with a comprehensive assessment of threats to various taxonomic groups. The data  did not have a server URL file nor was in .csv format for use of the download.file command. To download the spatial data for reptiles, I visited [this](http://www.iucnredlist.org/technical-documents/spatial-data) website. The main dataset for reptiles was downloaded into the downloads folder of my personal computer, where it was then moved and unzipped in my Spatial Data folder which was put on the gitignite list due to sheer size.  For reproducibility, I then wrote it into a .csv and deposited it into my [repository](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R) on GitHub. The data was then unpacked using the taxize package, which required an IUCN Red List API. The application is at http://apiv3.iucnredlist.org/api/v3/token. Once I did, with the help of the rredlist package, the data frame contained 273 observations, representing the same number of unique species. It also had 2 variables: the binomial and the iucn category. Being that I used pipes for this step, I also loaded tidyverse, which includes dplyr. 
 
 ```{r}
-# Including spatial information into the data frame
+## Including spatial information into the data frame
 Turtle_status<-read.csv("./Data/Base/Turtle_status.csv")
 
-# Data summary
+## Data summary
 kable(cbind(Turtle_status), "html") %>%
   kable_styling() %>%
   scroll_box(width = "500px", height = "500px")
@@ -88,7 +88,7 @@ table(Turtle_status$iucn)
 ```
 Categories "Near Threatened" and "Least Concern" became their own categories while "Conservation Dependent" was merged into "Near Threatened". 
 ```{r echo=TRUE}
-# To rename outdated categories 
+## To rename outdated categories 
 Turtle_status$iucn[which(Turtle_status$iucn=="LR/cd")]<-"NT"
 Turtle_status$iucn[which(Turtle_status$iucn=="LR/nt")]<-"NT"
 Turtle_status$iucn[which(Turtle_status$iucn=="LR/lc")]<-"LC"
@@ -99,41 +99,41 @@ table(Turtle_status$iucn)
 ### GBIF Occurrence Data
 I also used the GBIF occurrence data to be able to graphically analyze the geographic patterns of turtles. Due to the size of this [dataframe](https://github.com/SamWololo/Threatened-Species/blob/master/2.data_download_and_processing.R), I added it to my gitignore. The dataframe contained 348,778 observations with 184 variables for 273 species of turtles. I used pipes here as well, and needed the tidyverse package to do so. 
 
-```{r message=FALSE, warning=FALSE}
-gbif_records<-read.csv("Data/Base/gbif_records2.csv")
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#gbif_records<-read.csv("Data/Base/gbif_records2.csv")
 
 ```
 I then cleaned many of the variables, being that many in the data frame were beyond the scope of this project. 
 ```{r echo=TRUE}
-gbif_records<-
-  gbif_records %>% 
-  dplyr::filter(!is.na(lon)&!is.na(lat))%>%
-  dplyr::select(lon, lat, species, country) 
+#gbif_records<-
+  #gbif_records %>% 
+  #dplyr::filter(!is.na(lon)&!is.na(lat))%>%
+  #dplyr::select(lon, lat, species, country) 
 ```
-This yielded a data frame still with 204,747 occurrences but with only 4 variables. These variables are:
+This yielded a data frame still with 204,747 occurrences but with only 4 variables. These variables are lon, lat, species, country. 
 ```{r echo=TRUE}
-names(gbif_records)
+#names(gbif_records)
 
 ```
 After this, I removed the duplicate occurences in the data frame, yielding 82,837 observations for 4 variables for 273 species of turtles. 
 ```{r}
 ## Get rid of duplicate occurrences
-dups=duplicated(gbif_records[, c("lon", "lat", "country")])
-gbif_records <-gbif_records[!dups, ]
+#dups=duplicated(gbif_records[, c("lon", "lat", "country")])
+#gbif_records <-gbif_records[!dups, ]
 ```
 
 ### Merging
 At this stage the data has been cleaned for the purposes of this project. The next step is combining the data into one data frame for it to be usable during analysis. I then wrote this file into a .csv. 
 
 ```{r}
-# Create a "binomial" column because data frames must be merged on a name they both have. 
-Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
+## Create a "binomial" column because data frames must be merged on a name they both have. 
+#Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
 
-# To merge the turtle amniote data and iucn data 
-Turtle_Lifehistory_df<-merge(Testudines, Turtle_status, by.x="Binomial")
+## To merge the turtle amniote data and iucn data 
+#Turtle_Lifehistory_df<-merge(Testudines, Turtle_status, by.x="Binomial")
 
-# To merge the previous merger with gbif records 
-All_Dataframes_df<-merge(Turtle_Lifehistory_df, gbif_records, by.x="Binomial", by.y="species")
+## To merge the previous merger with gbif records 
+#All_Dataframes_df<-merge(Turtle_Lifehistory_df, gbif_records, by.x="Binomial", by.y="species")
 
 ```
 
@@ -141,10 +141,10 @@ All_Dataframes_df<-merge(Turtle_Lifehistory_df, gbif_records, by.x="Binomial", b
 # Results and Discussion
 ### Data description
 ```{r}
-# Load data
+## Load data
 All_Dataframes_df<-read.csv("./Data/Processed/Clean_Turtle_Lifehistory_Data.csv")
 
-# Data description
+## Data description
 kable(cbind(head(All_Dataframes_df)), "html") %>%
   kable_styling() %>%
   scroll_box(width = "600px", height = "400px")
@@ -153,14 +153,14 @@ kable(cbind(head(All_Dataframes_df)), "html") %>%
 
 ### Data distribution
 ```{r message=FALSE, warning=FALSE}
-# Get map with maptools package
+## Get map with maptools package
 data(wrld_simpl)
 
-# Color vector with RColorBrewer package
+## Color vector with RColorBrewer package
 cols<-brewer.pal(n=n_distinct(All_Dataframes_df$iucn),name="Set1")
 cols_status<-cols[All_Dataframes_df$iucn]
 
-# To plot map and get turtle distribution
+## To plot map and get turtle distribution
 plot(wrld_simpl, xlim=c(min(All_Dataframes_df$lon)-1,max(All_Dataframes_df$lon)+1), ylim=c(min(All_Dataframes_df$lat)-1,max(All_Dataframes_df$lat)+1), axes=TRUE, col="light cyan")
 points(All_Dataframes_df$lon, All_Dataframes_df$lat, col=cols_status, pch=16, cex=0.75)
 legend("top",fill=cols,legend = levels(All_Dataframes_df$iucn),horiz=TRUE)
@@ -168,15 +168,15 @@ legend("top",fill=cols,legend = levels(All_Dataframes_df$iucn),horiz=TRUE)
 ```
 
 ```{r message=FALSE, warning=TRUE}
-# Creating a background map with leaflet package
-# Create a color palette by factor:
+## Creating a background map with leaflet package
+## Create a color palette by factor:
 mypalette = colorFactor( palette="YlOrBr", domain=All_Dataframes_df$iucn, na.color="transparent")
 
-# Prepare the text for the tooltip:
+## Prepare the text for the tooltip:
 mytext=paste("Status: ", All_Dataframes_df$iucn, "<br/>", "Species: ", All_Dataframes_df$Binomial, "<br/>", "Bodymass (g): ", All_Dataframes_df$adult_body_mass_g, sep="") %>%
   lapply(htmltools::HTML)
 
-# Final Map
+## Final Map
 leaflet(All_Dataframes_df) %>% 
   addTiles()  %>% 
   addProviderTiles("Esri.WorldImagery") %>%
@@ -192,7 +192,7 @@ leaflet(All_Dataframes_df) %>%
 ### Data analysis
 In order to demonstrate the relationship between the body mass (g) life history trait to the IUCN category, we drew a box and whisker plot. 
 ```{r message=FALSE, warning=FALSE}
-# Boxplot showing log mean weight against IUCN status. Used ggplot2 package.
+## Boxplot showing log mean weight against IUCN status. Used ggplot2 package.
 All_Dataframes_df %>% 
   group_by(Binomial) %>% 
   dplyr::summarise(Weight_avg=mean(adult_body_mass_g, na.rm=TRUE),
@@ -203,14 +203,16 @@ All_Dataframes_df %>%
   ylab("Log Body Mass (g)") +
   xlab("IUCN Status")
 ```
+
 We see somewhat of a relationship in this scatterplot. It appears that turtles that are of a larger body mass lay larger eggs. This may point towards a larger initial energy investment in offspring, moreso since larger turtles have larger clutch sizes.  Furthermore, we see some occurrence of more critical categories (CR, VU, EN) with larger turtles that invest much in their eggs. 
 ```{r message=FALSE, warning=FALSE}
-# Relationship between log adult body mass and log egg mass among turtles
+## Relationship between log adult body mass and log egg mass among turtles
 ggplot(All_Dataframes_df,aes(x=log(adult_body_mass_g), y=log(egg_mass_g))) + 
   geom_point(aes(colour=iucn, size=litter_or_clutch_size_n), alpha=0.8) +
   ylab("Log Egg Mass (g)") +
   xlab("Log Adult Body Mass (g)")
 ```
+
 Waples et al. (2016) highlighted the importance of adult turtle mortality and population sizes. I used this as inspiration to probe the potential of an even stronger relationship between a life-history trait and extinction rates. I used the maximum longevity variable.  
 ```{r}
 ggplot(All_Dataframes_df, aes(x=iucn, y=maximum_longevity_y, fill=iucn)) + 
@@ -219,14 +221,16 @@ ggplot(All_Dataframes_df, aes(x=iucn, y=maximum_longevity_y, fill=iucn)) +
   ylab("Maximum Longevity (years)") +
   xlab("IUCN Status")
 ```
+
 We see promising data in this scatterplot in that the longer-lived turtles appear to fall under more severe IUCN categories. Egg mass is also correlated to longer-lived turtles, and so is the clutch size. The six marine turtles in the world are some of the heaviest, and follow patterns similar to those displayed here. Furthermore, they often lay hundreds of eggs in a single clutch.  
-```{r}
+```{r message=FALSE, warning=FALSE}
 ggplot(All_Dataframes_df,aes(x=maximum_longevity_y, y=log(egg_mass_g))) + 
   geom_point(aes(colour=iucn, size=litter_or_clutch_size_n), alpha=0.8) +
   ylab("Log Egg Mass (g)") +
   xlab("Maximum Longevity (years)")
 ```
 
+It appears that life-history extinction rate correlates in turtles lie in both body mass and longevity. Conservation efforts must thus focus on preemtively identifying turtles that could become at risk based on these life-history traits.  
 
 # References
 Bonin, F., Devaux, B., & Dupré, A. (2006). Turtles of the World. JHU Press.

@@ -38,16 +38,9 @@ write.csv(Turtle_status, file="./Data/Base/Turtle_status.csv")
 ## Include the info into the data frame (species_iucn=Turtle_status)
 Turtle_status<-read.csv("./Data/Base/Turtle_status.csv")
 
-Testudines$iucn<-Turtle_status
-
 Turtle_status[,c("Binomial","iucn")]
 
 ## Exploring the data
-class(Turtle_status)
-
-head(Turtle_status)
-tail(Turtle_status)
-
 unique(Turtle_status$iucn) # Shows us all IUCN categories
 table(Turtle_status$iucn) # Gives a table showing IUCN categories and number of species in each.  
 

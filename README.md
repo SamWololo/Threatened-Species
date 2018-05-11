@@ -135,3 +135,6 @@ Questions For Susy:
 4. Is it OK to do output only?
 5. Is it OK to say "4 vectors"? Or do I have to name each vector? Name each species?
 6. Some of the data I link in the methods section has been put in the gitignore list. 
+
+5/11/18
+I will be running the code and Rmarkdown on a new computer. I want to verify whether it is completely reproducible. I also noticed that the original Turtle_status (pre-merge) file has lost the outdated IUCN files. I don't know why this is, hopefully I can fix it. 
