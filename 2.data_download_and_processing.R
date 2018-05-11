@@ -5,10 +5,10 @@
 # Life-history data -----------------------------------------------------------------------------------
 ## Downloading amniote data
 download.file("http://www.esapubs.org/archive/ecol/E096/269/Data_Files/Amniote_Database_Aug_2015.csv", 
-              "./Data/Amniote_Database_Aug_2015.csv")
+              "./Data/Base/Amniote_Database_Aug_2015.csv")
 
 # Read data
-Amniote<-read.csv("./Data/Amniote_Database_Aug_2015.csv")
+Amniote<-read.csv("./Data/Base/Amniote_Database_Aug_2015.csv")
 Amniote[Amniote==-999]<-NA
 
 # Data carpentry
@@ -28,19 +28,15 @@ Testudines<-
 ## Extracting IUCN Status for each species
 Sys.setenv(IUCN_REDLIST_KEY="79326e37e61929e5349ff01eaef7da1a0a8a9003583714d5282227332875d576")
 
-Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
-
 # ia is a list of summaries. This is NOT an object, so you can't turn it into a .csv
 ia <- iucn_summary(Testudines$Binomial) ## WARNING: This script loads all the taxa for Testudines ~10 mins
 #This unpacks ia so that we're just looking at the status
 Turtle_status<-iucn_status(ia) # "Turtle_status" is the name of the dataframe full of turtle statuses
 
-write.csv(Turtle_status, file="./Data/Turtle_status.csv")
+write.csv(Turtle_status, file="./Data/Base/Turtle_status.csv")
 
 ## Include the info into the data frame (species_iucn=Turtle_status)
-Turtle_status<-read.csv("./Data/Turtle_status.csv")
-
-colnames(Turtle_status) <- c("Binomial","iucn")
+Turtle_status<-read.csv("./Data/Base/Turtle_status.csv")
 
 Testudines$iucn<-Turtle_status
 
@@ -52,11 +48,8 @@ class(Turtle_status)
 head(Turtle_status)
 tail(Turtle_status)
 
-table(Turtle_status$iucn) # Gives us the unique IUCN categories. No numbers, though. 
-
-iucn_count <- Turtle_status %>%
-  group_by(iucn)%>%
-  summarize(count=n()) # Gives us a useful table showing the distribution of taxa over IUCN categories.
+unique(Turtle_status$iucn) # Shows us all IUCN categories
+table(Turtle_status$iucn) # Gives a table showing IUCN categories and number of species in each.  
 
 ## Interestingly, we have some categories which are outdated. We need to get rid of these. 
 # Which species are included in these outdated categories? 
@@ -83,12 +76,12 @@ for(i in 1:length(Testudines$Binomial)){
   tmp<-gbif(Testudines$genus[i],Testudines$species[i])
   
   Total_records<-rbind.fill(Total_records,tmp)
-  write.csv(Total_records,"./Data/gbif_records2.csv")
+  write.csv(Total_records,"./Data/Base/gbif_records2.csv")
   
 }  # WARNING: This code loads all of the GBIF records for Testudines and takes 3 hours
 
 
-gbif_records<-read.csv("Data/gbif_records2.csv")
+gbif_records<-read.csv("Data/Base/gbif_records2.csv")
 
 ## Cleaning records
 # I only want some of the vectors of the gbif dataset, which means that I will have to clean some of them
@@ -106,9 +99,11 @@ gbif_records <-gbif_records[!dups, ]
 
 # Merging Data Frames ------------------------------------------------------------------------------
 # Now that we have all of our data loaded I need to put all of them into one dataframe for them to be usable. 
+# Create a "binomial" column because data frames must be merged on a name they both have. 
+Testudines$Binomial<-paste(Testudines$genus,Testudines$species)
 
 # To merge the turtle amniote data and iucn data 
-Turtle_Lifehistory_df<-merge(Testudines, Turtle_status, by="Binomial")
+Turtle_Lifehistory_df<-merge(Testudines, Turtle_status, by.x="Binomial")
 
 # To merge the previous merger with gbif records 
 All_Dataframes_df<-merge(Turtle_Lifehistory_df, gbif_records, by.x="Binomial", by.y="species")

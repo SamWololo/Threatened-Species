@@ -46,3 +46,15 @@ if(!require(RColorBrewer)) {
 if(!require(ggplot2)) {
   install.packages("ggplot2");
   require(ggplot2)}
+
+if(!require(knitr)) {
+  install.packages("knitr");
+  require(knitr)}
+
+if(!require(kableExtra)) {
+  install.packages("kableExtra");
+  require(kableExtra)}
+
+if(!require(leaflet)) {
+  install.packages("leaflet");
+  require(leaflet)}
