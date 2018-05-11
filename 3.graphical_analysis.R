@@ -17,6 +17,7 @@ All_Dataframes_df %>%
   group_by(litter_or_clutch_size_n) %>% 
   dplyr::summarise(N_sp=n_distinct(Binomial))  # dplyr because summarise belongs to two packages, gets confused
 
+## Boxplots
 # Graphing average log bodymass by IUCN status
 pdf("./Figures/boxplot_IUCN_logweight.pdf")
 All_Dataframes_df %>% 
