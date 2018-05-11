@@ -12,6 +12,11 @@ All_Dataframes_df %>%
   dplyr::summarise(N_sp=n_distinct(Binomial),  # add dplyr because summarise belongs to two packages
                    Weight_avg=mean(adult_body_mass_g, na.rm=TRUE))
 
+#  by clutch size
+All_Dataframes_df %>% 
+  group_by(litter_or_clutch_size_n) %>% 
+  dplyr::summarise(N_sp=n_distinct(Binomial))  # dplyr because summarise belongs to two packages, gets confused
+
 # Graphing average log bodymass by IUCN status
 pdf("./Figures/boxplot_IUCN_logweight.pdf")
 All_Dataframes_df %>% 
@@ -25,7 +30,7 @@ All_Dataframes_df %>%
   xlab("IUCN Status")
 dev.off()
 
-png("./Figures/boxplot_status_by_logclutchsize")
+pdf("./Figures/boxplot_status_by_logclutchsize.pdf")
 ggplot(All_Dataframes_df, aes(x=iucn, y=litter_or_clutch_size_n, fill=iucn)) + 
   geom_boxplot(alpha=0.3) +
   theme(legend.position="none")+
@@ -33,7 +38,7 @@ ggplot(All_Dataframes_df, aes(x=iucn, y=litter_or_clutch_size_n, fill=iucn)) +
   xlab("IUCN Status")
 dev.off()
 
-png("./Figures/boxplot_status_by_maximum_longevity_y")
+pdf("./Figures/boxplot_status_by_maximum_longevity_y.pdf")
 ggplot(All_Dataframes_df, aes(x=iucn, y=maximum_longevity_y, fill=iucn)) + 
   geom_boxplot(alpha=0.3) +
   theme(legend.position="none")+
@@ -55,10 +60,6 @@ points(All_Dataframes_df$lon, All_Dataframes_df$lat, col=cols_status, pch=16, ce
 legend("top",fill=cols,legend = levels(All_Dataframes_df$iucn),horiz=TRUE)
 dev.off()
 
-#  by country
-All_Dataframes_df %>% 
-  group_by(litter_or_clutch_size_n) %>% 
-  dplyr::summarise(N_sp=n_distinct(Binomial))  # dplyr because summarise belongs to two packages, gets confused
 
 # Creating a background map with leaflet
 # Create a color palette by factor:
@@ -102,3 +103,4 @@ ggplot(All_Dataframes_df,aes(x=maximum_longevity_y, y=log(egg_mass_g))) +
   ylab("Log Egg Mass (g)") +
   xlab("Maximum Longevity (years)")
 dev.off()
+
