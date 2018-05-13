@@ -142,3 +142,6 @@ I will be running the code and Rmarkdown on a new computer. I want to verify whe
 NOTE WHEN EVALUATING: THe Rmarkdown is heavy. It only takes a couple of minutes to load, and another 30 seconds to process when it's put out. If you click too rapidly/eagerly, it will stop responding. Afterwards it works great!!
 
 I am unable to turn the Rmarkdown into a PDF because the leaflet graph is in latex which is incompatible with the format. 
+
+5/13/2018
+I MESSED UP. In the minutes up to the deadline I tried to turn the the Rmarkdown into a word doc to make it possible to view my latex occurrence graph in the figures folder. This didn't work out, so I just settled for the html output. What I didn't know is that switching to "knit to word" would also add two lines of code to line 5, "output". This code gives an error to the Rmarkdown. 
